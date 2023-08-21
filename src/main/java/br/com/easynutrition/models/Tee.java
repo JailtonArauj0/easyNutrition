@@ -8,11 +8,9 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "TB_TEE")
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@Data
 public class Tee implements Serializable {
 
     @Serial

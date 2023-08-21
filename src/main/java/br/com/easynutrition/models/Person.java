@@ -1,5 +1,6 @@
 package br.com.easynutrition.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,10 +11,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "TB_PERSON")
-@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@Data
 public class Person implements Serializable {
 
     @Serial
@@ -31,6 +31,7 @@ public class Person implements Serializable {
     @Column(nullable = false, unique = true)
     private String cpf;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate birthDate;
 
     @OneToMany

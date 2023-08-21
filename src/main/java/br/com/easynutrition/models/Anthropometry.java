@@ -9,11 +9,9 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "TB_ANTHROPOMETRY")
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@Data
 public class Anthropometry implements Serializable {
 
     @Serial
