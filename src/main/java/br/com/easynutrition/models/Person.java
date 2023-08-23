@@ -33,8 +33,4 @@ public class Person implements Serializable {
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate birthDate;
-
-    @OneToMany
-    private List<Anthropometry> anthropometry;
-
 }

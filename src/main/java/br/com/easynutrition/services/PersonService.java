@@ -17,6 +17,7 @@ public class PersonService {
     public List<Person> findAll() {
         return personRepository.findAll();
     }
+
     public Person findById(Long id) {
         return personRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
     }

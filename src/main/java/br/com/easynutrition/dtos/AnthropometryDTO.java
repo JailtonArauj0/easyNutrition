@@ -1,35 +1,18 @@
-package br.com.easynutrition.models;
+package br.com.easynutrition.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "TB_ANTHROPOMETRY")
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
-public class Anthropometry implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = 107452316370886152L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-
+@NoArgsConstructor
+public class AnthropometryDTO {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate evaluationDate;
 
-    @Column(nullable = false)
     private double weight;
-
-    @Column(nullable = false)
     private double height;
 
     private double tricipital;
@@ -50,9 +33,4 @@ public class Anthropometry implements Serializable {
     private double forearm;
     private double medialThigh;
     private double calf;
-
-    @ManyToOne
-    @JoinColumn(name = "person_id")
-    private Person person;
-
 }
