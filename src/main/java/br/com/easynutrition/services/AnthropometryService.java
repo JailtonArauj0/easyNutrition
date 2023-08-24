@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AnthropometryService {
@@ -39,4 +40,13 @@ public class AnthropometryService {
         return anthropometryRepository.save(anthropometry);
     }
 
+    public Anthropometry update(Anthropometry anthropometry) {
+        anthropometryRepository.findById(anthropometry.getId()).orElseThrow(() -> new RuntimeException("Avaliação não encontrada."));
+        return anthropometryRepository.save(anthropometry);
+    }
+
+    public void delete(Long id) {
+        anthropometryRepository.findById(id).orElseThrow(() -> new RuntimeException("Avaliação não encontrada."));
+        anthropometryRepository.deleteById(id);
+    }
 }
