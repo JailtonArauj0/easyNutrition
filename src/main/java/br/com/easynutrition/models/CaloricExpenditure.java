@@ -1,17 +1,19 @@
 package br.com.easynutrition.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "TB_TEE")
+@Table(name = "TB_CALORIC_EXPENDITURE")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Tee implements Serializable {
+public class CaloricExpenditure implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 5340798625542584951L;
@@ -21,14 +23,18 @@ public class Tee implements Serializable {
     private long id;
 
     private double weight;
-
-    private int height;
-
+    private double height;
+    private int age;
+    private char sex;
     private double activityFactor;
 
     @Enumerated(EnumType.STRING)
     private Formula formula;
 
+    private double geb;
+    private double get;
+
     @OneToOne
+    @JoinColumn(name = "person_id")
     private Person person;
 }
