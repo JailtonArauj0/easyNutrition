@@ -39,4 +39,9 @@ public class CaloricExpenditureController {
         return new ResponseEntity<>(expenditureDTO, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}")
+    private ResponseEntity<?> delete(@PathVariable Long id) {
+        caloricExpenditureService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

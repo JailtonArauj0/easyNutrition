@@ -71,4 +71,13 @@ public class CaloricExpenditureService {
         }
         return caloricExpenditureRepository.save(caloricExpenditure);
     }
+
+    public boolean delete(Long id) {
+        Optional<CaloricExpenditure> exists = caloricExpenditureRepository.findById(id);
+        if (exists.isEmpty()) {
+            throw new RuntimeException("Não existe cálculo energético para este paciente.");
+        }
+        caloricExpenditureRepository.deleteById(id);
+        return true;
+    }
 }
