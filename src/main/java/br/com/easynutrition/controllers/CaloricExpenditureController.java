@@ -24,9 +24,19 @@ public class CaloricExpenditureController {
     }
 
     @PostMapping
-    private ResponseEntity<CaloricExpenditure> save(@RequestBody CaloricExpenditure caloricExpenditure) {
+    private ResponseEntity<CaloricExpenditureDTO> save(@RequestBody CaloricExpenditure caloricExpenditure) {
         var saved = caloricExpenditureService.save(caloricExpenditure);
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+        CaloricExpenditureDTO expenditureDTO = new CaloricExpenditureDTO();
+        BeanUtils.copyProperties(saved, expenditureDTO);
+        return new ResponseEntity<>(expenditureDTO, HttpStatus.CREATED);
+    }
+
+    @PutMapping
+    private ResponseEntity<CaloricExpenditureDTO> update(@RequestBody CaloricExpenditure caloricExpenditure) {
+        var updated = caloricExpenditureService.update(caloricExpenditure);
+        CaloricExpenditureDTO expenditureDTO = new CaloricExpenditureDTO();
+        BeanUtils.copyProperties(updated, expenditureDTO);
+        return new ResponseEntity<>(expenditureDTO, HttpStatus.OK);
     }
 
 }
