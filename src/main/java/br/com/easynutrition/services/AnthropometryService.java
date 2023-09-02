@@ -1,16 +1,12 @@
 package br.com.easynutrition.services;
 
 import br.com.easynutrition.models.Anthropometry;
-import br.com.easynutrition.models.Person;
 import br.com.easynutrition.repositories.AnthropometryRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AnthropometryService {

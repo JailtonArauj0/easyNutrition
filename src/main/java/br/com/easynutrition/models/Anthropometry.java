@@ -1,5 +1,6 @@
 package br.com.easynutrition.models;
 
+import br.com.easynutrition.utils.Classifications;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -52,6 +53,9 @@ public class Anthropometry implements Serializable {
     private double forearm;
     private double medialThigh;
     private double calf;
+
+    @Embedded
+    private Classifications classifications;
 
     @ManyToOne
     @JoinColumn(name = "person_id")
