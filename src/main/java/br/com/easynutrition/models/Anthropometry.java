@@ -55,7 +55,7 @@ public class Anthropometry implements Serializable {
     private double calf;
 
     @Embedded
-    private Classifications classifications;
+    private NutritionalAssessment nutritionalAssessment;
 
     @ManyToOne
     @JoinColumn(name = "person_id")
