@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,6 +31,7 @@ public class PersonDTO {
     @Size(min = 11, max = 11)
     private String cpf;
 
+    @NotNull
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate birthDate;
 

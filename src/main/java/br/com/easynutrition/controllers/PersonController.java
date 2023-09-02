@@ -47,16 +47,18 @@ public class PersonController {
         Person person = new Person();
         BeanUtils.copyProperties(personDTO, person);
         Person savedPerson = personService.save(person);
-        PersonDTO savedPersonDTO = new PersonDTO();
-        BeanUtils.copyProperties(savedPerson, savedPersonDTO);
-        return new ResponseEntity<>(savedPersonDTO, HttpStatus.CREATED);
+        BeanUtils.copyProperties(savedPerson, personDTO);
+        return new ResponseEntity<>(personDTO, HttpStatus.CREATED);
     }
 
 
     @PutMapping
-    private ResponseEntity<Person> update(@RequestBody Person person) {
+    private ResponseEntity<PersonDTO> update(@RequestBody @Valid PersonDTO personDTO) {
+        Person person = new Person();
+        BeanUtils.copyProperties(personDTO, person);
         Person savedPerson = personService.update(person);
-        return new ResponseEntity<>(savedPerson, HttpStatus.OK);
+        BeanUtils.copyProperties(savedPerson, personDTO);
+        return new ResponseEntity<>(personDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
