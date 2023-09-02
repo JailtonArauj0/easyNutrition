@@ -31,6 +31,8 @@ public class Anthropometry implements Serializable {
 
     @Column(nullable = false)
     private double height;
+    @Column(nullable = false)
+    private char sex;
 
     private double tricipital;
     private double abdominal;
