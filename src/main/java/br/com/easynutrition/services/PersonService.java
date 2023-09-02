@@ -39,6 +39,9 @@ public class PersonService {
     @Transactional
     public Person update(Person person) {
         this.findById(person.getId());
+        LocalDate date = person.getBirthDate();
+        int age = LocalDate.now().getYear() - date.getYear();
+        person.setAge(age);
         return personRepository.save(person);
     }
 
