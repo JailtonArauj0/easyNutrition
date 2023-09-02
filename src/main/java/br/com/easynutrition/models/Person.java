@@ -31,9 +31,10 @@ public class Person implements Serializable {
     @Column(nullable = false)
     private int age;
 
+    @Column(length = 11)
     private String phone;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 11)
     private String cpf;
 
     @Column(nullable = false)
