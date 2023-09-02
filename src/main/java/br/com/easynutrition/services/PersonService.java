@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +29,10 @@ public class PersonService {
         if (exists.isPresent()) {
             throw new RuntimeException("Este CPF já está sendo utilizado.");
         }
+        LocalDate date = person.getBirthDate();
+        int age = LocalDate.now().getYear() - date.getYear();
+        person.setAge(age);
+
         return personRepository.save(person);
     }
 

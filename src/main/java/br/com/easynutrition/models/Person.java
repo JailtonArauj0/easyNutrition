@@ -24,13 +24,19 @@ public class Person implements Serializable {
     private long id;
 
     @Column(nullable = false)
-    private String name;
+    private String firstName;
+
+    private String lastName;
+
+    @Column(nullable = false)
+    private int age;
 
     private String phone;
 
     @Column(nullable = false, unique = true)
     private String cpf;
 
+    @Column(nullable = false)
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate birthDate;
 }
