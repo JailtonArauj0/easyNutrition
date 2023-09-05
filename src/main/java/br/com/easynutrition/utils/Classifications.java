@@ -1,6 +1,9 @@
 package br.com.easynutrition.utils;
 
 import br.com.easynutrition.models.Anthropometry;
+import br.com.easynutrition.models.BodyCircunferences;
+import br.com.easynutrition.models.NutritionalAssessment;
+import br.com.easynutrition.models.Skinfolds;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,15 +27,19 @@ public class Classifications {
     public Classifications(Anthropometry anthropometry) {
         this.weight = anthropometry.getWeight();
         this.height = anthropometry.getHeight();
-        this.tricipital = anthropometry.getTricipital();
-        this.abdominal = anthropometry.getAbdominal();
-        this.middleAxillary = anthropometry.getMiddleAxillary();
-        this.thoracic = anthropometry.getThoracic();
-        this.subscapular = anthropometry.getSubscapular();
-        this.thigh = anthropometry.getThigh();
-        this.suprailliac = anthropometry.getSuprailliac();
-        this.waist = anthropometry.getWaist();
-        this.hip = anthropometry.getHip();
+
+        Skinfolds skinfolds = anthropometry.getSkinfolds();
+        this.tricipital = skinfolds.getTricipital();
+        this.abdominal = skinfolds.getAbdominal();
+        this.middleAxillary = skinfolds.getMiddleAxillary();
+        this.thoracic = skinfolds.getThoracic();
+        this.subscapular = skinfolds.getSubscapular();
+        this.thigh = skinfolds.getThigh();
+        this.suprailliac = skinfolds.getSuprailliac();
+
+        BodyCircunferences circunferences = anthropometry.getBodyCircunferences();
+        this.waist = circunferences.getWaist();
+        this.hip = circunferences.getHip();
     }
 
     public double bmi() {
