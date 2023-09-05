@@ -4,6 +4,7 @@ import br.com.easynutrition.utils.Classifications;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.io.Serial;
@@ -24,6 +25,7 @@ public class Anthropometry implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Column(nullable = false)
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate evaluationDate;
 
@@ -32,27 +34,15 @@ public class Anthropometry implements Serializable {
 
     @Column(nullable = false)
     private double height;
+
     @Column(nullable = false)
     private char sex;
 
-    private double tricipital;
-    private double abdominal;
-    private double middleAxillary;
-    private double thoracic;
-    private double subscapular;
-    private double thigh; //COXA
-    private double suprailliac;
+    @Embedded
+    private Skinfolds skinfolds;
 
-    //CIRCUNFERENCES
-    private double shoulder;
-    private double chest;
-    private double waist;
-    private double abdomen;
-    private double hip;
-    private double arm;
-    private double forearm;
-    private double medialThigh;
-    private double calf;
+    @Embedded
+    private BodyCircunferences bodyCircunferences;
 
     @Embedded
     private NutritionalAssessment nutritionalAssessment;
