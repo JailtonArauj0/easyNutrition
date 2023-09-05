@@ -4,6 +4,7 @@ import br.com.easynutrition.models.Anthropometry;
 import br.com.easynutrition.repositories.AnthropometryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -32,15 +33,18 @@ public class AnthropometryService {
         return anthropometryList;
     }
 
+    @Transactional
     public Anthropometry save(Anthropometry anthropometry) {
         return anthropometryRepository.save(anthropometry);
     }
 
+    @Transactional
     public Anthropometry update(Anthropometry anthropometry) {
         anthropometryRepository.findById(anthropometry.getId()).orElseThrow(() -> new RuntimeException("Avaliação não encontrada."));
         return anthropometryRepository.save(anthropometry);
     }
 
+    @Transactional
     public void delete(Long id) {
         anthropometryRepository.findById(id).orElseThrow(() -> new RuntimeException("Avaliação não encontrada."));
         anthropometryRepository.deleteById(id);
