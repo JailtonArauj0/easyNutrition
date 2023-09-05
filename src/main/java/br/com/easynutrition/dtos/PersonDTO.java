@@ -2,12 +2,9 @@ package br.com.easynutrition.dtos;
 
 import br.com.easynutrition.models.Person;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
