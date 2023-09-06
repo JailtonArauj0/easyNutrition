@@ -26,7 +26,8 @@ public class Classifications {
 
     public Classifications(Anthropometry anthropometry) {
         this.weight = anthropometry.getWeight();
-        this.height = anthropometry.getHeight();
+        this.height = anthropometry.getHeight() / 100;
+        this.sex = anthropometry.getSex();
 
         Skinfolds skinfolds = anthropometry.getSkinfolds();
         this.tricipital = skinfolds.getTricipital();
@@ -43,7 +44,8 @@ public class Classifications {
     }
 
     public double bmi() {
-        return (this.weight / this.height) / this.height;
+        double bmi = (this.weight / this.height) / this.height;
+        return Math.round(bmi*100.0) / 100.0;
     }
 
     public String bmiClassification() {
@@ -66,7 +68,8 @@ public class Classifications {
     }
 
     public double whr() {
-        return this.waist / this.hip;
+        double whr = this.waist / this.hip;
+        return Math.round(whr*100.0) / 100.0;
     }
 
     public String whrClassification() {
@@ -96,17 +99,19 @@ public class Classifications {
         double skinFoldsSum = tricipital + abdominal + middleAxillary + thoracic + subscapular + thigh + suprailliac;
         if (sex == 'M' || sex == 'm') {
             double bodyDensity = 1.112 - 0.00043499 * (skinFoldsSum) + 0.00000055 * (skinFoldsSum * skinFoldsSum) - 0.00028826 * age;
-            return ((4.95 / bodyDensity) - 4.50) * 100;
+            double percentage = ((4.95 / bodyDensity) - 4.50) * 100;
+            return Math.round(percentage * 100.0) / 100.0;
 
         } else if (sex == 'F' || sex == 'f') {
             double bodyDensity = 1.097 - 0.00046971 * (skinFoldsSum) + 0.00000056 * (skinFoldsSum * skinFoldsSum) - 0.00012828 * age;
-            return ((4.95 / bodyDensity) - 4.50) * 100;
+            double percentage = ((4.95 / bodyDensity) - 4.50) * 100;
+            return Math.round(percentage * 100.0) / 100.0;
         }
         return 0;
     }
 
     public String bfClassification(double percentage) {
-        if (sex == 'M' || sex == 'm') {
+        if (this.sex == 'M' || this.sex == 'm') {
             if (age >= 20 && age <= 29) {
                 if (percentage < 11) {
                     return "Excelente (atlético)";
@@ -169,7 +174,7 @@ public class Classifications {
                 }
             }
 
-        } else if (sex == 'F' || sex == 'f') {
+        } else if (this.sex == 'F' || this.sex == 'f') {
             if (age >= 20 && age <= 29) {
                 if (percentage < 16) {
                     return "Excelente (atlético)";
