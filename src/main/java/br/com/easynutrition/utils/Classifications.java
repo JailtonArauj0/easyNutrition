@@ -104,4 +104,134 @@ public class Classifications {
         }
         return 0;
     }
+
+    public String bfClassification(double percentage) {
+        if (sex == 'M' || sex == 'm') {
+            if (age >= 20 && age <= 29) {
+                if (percentage < 11) {
+                    return "Excelente (atlético)";
+                } else if (percentage >= 11 && percentage < 13) {
+                    return "Bom";
+                } else if (percentage >= 14 && percentage < 20) {
+                    return "Dentro da média";
+                } else if (percentage >= 21 && percentage < 23) {
+                    return "Regular";
+                } else {
+                    return "Alto percentual de Gordura";
+                }
+            } else if (age >= 30 && age <= 39) {
+                if (percentage < 12) {
+                    return "Excelente (atlético)";
+                } else if (percentage >= 12 && percentage < 14) {
+                    return "Bom";
+                } else if (percentage >= 15 && percentage < 21) {
+                    return "Dentro da média";
+                } else if (percentage >= 22 && percentage < 24) {
+                    return "Regular";
+                } else {
+                    return "Alto percentual de Gordura";
+                }
+            } else if (age >= 40 && age <= 49) {
+                if (percentage < 14) {
+                    return "Excelente (atlético)";
+                } else if (percentage >= 14 && percentage < 16) {
+                    return "Bom";
+                } else if (percentage >= 17 && percentage < 23) {
+                    return "Dentro da média";
+                } else if (percentage >= 24 && percentage < 26) {
+                    return "Regular";
+                } else {
+                    return "Alto percentual de Gordura";
+                }
+            } else if (age >= 50 && age <= 59) {
+                if (percentage < 15) {
+                    return "Excelente (atlético)";
+                } else if (percentage >= 15 && percentage < 17) {
+                    return "Bom";
+                } else if (percentage >= 18 && percentage < 24) {
+                    return "Dentro da média";
+                } else if (percentage >= 25 && percentage < 27) {
+                    return "Regular";
+                } else {
+                    return "Alto percentual de Gordura";
+                }
+            } else if (age >= 60) {
+                if (percentage < 16) {
+                    return "Excelente (atlético)";
+                } else if (percentage >= 16 && percentage < 18) {
+                    return "Bom";
+                } else if (percentage >= 19 && percentage < 25) {
+                    return "Dentro da média";
+                } else if (percentage >= 26 && percentage < 28) {
+                    return "Regular";
+                } else {
+                    return "Alto percentual de Gordura";
+                }
+            }
+
+        } else if (sex == 'F' || sex == 'f') {
+            if (age >= 20 && age <= 29) {
+                if (percentage < 16) {
+                    return "Excelente (atlético)";
+                } else if (percentage >= 16 && percentage < 19) {
+                    return "Bom";
+                } else if (percentage >= 20 && percentage < 28) {
+                    return "Dentro da média";
+                } else if (percentage >= 29 && percentage < 31) {
+                    return "Regular";
+                } else {
+                    return "Alto percentual de Gordura";
+                }
+            } else if (age >= 30 && age <= 39) {
+                if (percentage < 17) {
+                    return "Excelente (atlético)";
+                } else if (percentage >= 17 && percentage < 20) {
+                    return "Bom";
+                } else if (percentage >= 21 && percentage < 29) {
+                    return "Dentro da média";
+                } else if (percentage >= 30 && percentage < 32) {
+                    return "Regular";
+                } else {
+                    return "Alto percentual de Gordura";
+                }
+            } else if (age >= 40 && age <= 49) {
+                if (percentage < 18) {
+                    return "Excelente (atlético)";
+                } else if (percentage >= 18 && percentage < 21) {
+                    return "Bom";
+                } else if (percentage >= 22 && percentage < 30) {
+                    return "Dentro da média";
+                } else if (percentage >= 31 && percentage < 33) {
+                    return "Regular";
+                } else {
+                    return "Alto percentual de Gordura";
+                }
+            } else if (age >= 50 && age <= 59) {
+                if (percentage < 19) {
+                    return "Excelente (atlético)";
+                } else if (percentage >= 19 && percentage < 22) {
+                    return "Bom";
+                } else if (percentage >= 23 && percentage < 31) {
+                    return "Dentro da média";
+                } else if (percentage >= 32 && percentage < 34) {
+                    return "Regular";
+                } else {
+                    return "Alto percentual de Gordura";
+                }
+            } else if (age >= 60) {
+                if (percentage < 20) {
+                    return "Excelente (atlético)";
+                } else if (percentage >= 20 && percentage < 23) {
+                    return "Bom";
+                } else if (percentage >= 24 && percentage < 32) {
+                    return "Dentro da média";
+                } else if (percentage >= 33 && percentage < 35) {
+                    return "Regular";
+                } else {
+                    return "Alto percentual de Gordura";
+                }
+            }
+        }
+        return "Classificação desconhecida";
+    }
 }
