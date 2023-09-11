@@ -1,5 +1,6 @@
 package br.com.easynutrition.services;
 
+import br.com.easynutrition.exception.EntityNotFoundException;
 import br.com.easynutrition.models.Anthropometry;
 import br.com.easynutrition.models.NutritionalAssessment;
 import br.com.easynutrition.models.Person;
@@ -23,7 +24,7 @@ public class AnthropometryService {
     public List<Anthropometry> findAllByEvaluationDate(LocalDate date, Long id) {
         List<Anthropometry> anthropometryList = anthropometryRepository.findAllByEvaluationDateAndPersonId(date, id);
         if (anthropometryList.isEmpty()) {
-            throw new RuntimeException("Não foram encontradas avaliações.");
+            throw new EntityNotFoundException("Não foram encontradas avaliações.");
         }
         return anthropometryList;
     }
@@ -31,7 +32,7 @@ public class AnthropometryService {
     public List<Anthropometry> findAllByPersonId(Long id) {
         List<Anthropometry> anthropometryList = anthropometryRepository.findAllByPersonId(id);
         if (anthropometryList.isEmpty()) {
-            throw new RuntimeException("Não foram encontradas avaliações.");
+            throw new EntityNotFoundException("Não foram encontradas avaliações.");
         }
         return anthropometryList;
     }
@@ -44,14 +45,14 @@ public class AnthropometryService {
 
     @Transactional
     public Anthropometry update(Anthropometry anthropometry) {
-        anthropometryRepository.findById(anthropometry.getId()).orElseThrow(() -> new RuntimeException("Avaliação não encontrada."));
+        anthropometryRepository.findById(anthropometry.getId()).orElseThrow(() -> new EntityNotFoundException("Avaliação não encontrada."));
         Anthropometry assessment = nutritionalAssessment(anthropometry);
         return anthropometryRepository.save(assessment);
     }
 
     @Transactional
     public void delete(Long id) {
-        anthropometryRepository.findById(id).orElseThrow(() -> new RuntimeException("Avaliação não encontrada."));
+        anthropometryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Avaliação não encontrada."));
         anthropometryRepository.deleteById(id);
     }
 

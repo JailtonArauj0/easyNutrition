@@ -1,5 +1,7 @@
 package br.com.easynutrition.services;
 
+import br.com.easynutrition.exception.CustomException;
+import br.com.easynutrition.exception.EntityNotFoundException;
 import br.com.easynutrition.models.CaloricExpenditure;
 import br.com.easynutrition.models.Formula;
 import br.com.easynutrition.repositories.CaloricExpenditureRepository;
@@ -7,6 +9,7 @@ import br.com.easynutrition.utils.Equations;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -19,10 +22,11 @@ public class CaloricExpenditureService {
         return caloricExpenditureRepository.findAllByPersonId(id);
     }
 
+    @Transactional
     public CaloricExpenditure save(CaloricExpenditure caloricExpenditure) {
         CaloricExpenditure exists = this.findByPersonId(caloricExpenditure.getPerson().getId());
         if (exists != null) {
-            throw new RuntimeException("Já existe cálculo energético para este paciente.");
+            throw new CustomException("Já existe cálculo energético para este paciente, atualize-o.");
         }
         Equations equations = new Equations();
         BeanUtils.copyProperties(caloricExpenditure, equations);
@@ -45,10 +49,11 @@ public class CaloricExpenditureService {
         return caloricExpenditureRepository.save(caloricExpenditure);
     }
 
+    @Transactional
     public CaloricExpenditure update(CaloricExpenditure caloricExpenditure) {
         Optional<CaloricExpenditure> exists = caloricExpenditureRepository.findById(caloricExpenditure.getId());
         if (exists.isEmpty()) {
-            throw new RuntimeException("Não existe cálculo energético para este paciente.");
+            throw new EntityNotFoundException("Não existe cálculo energético para este paciente.");
         }
 
         Equations equations = new Equations();
@@ -72,12 +77,12 @@ public class CaloricExpenditureService {
         return caloricExpenditureRepository.save(caloricExpenditure);
     }
 
-    public boolean delete(Long id) {
+    @Transactional
+    public void delete(Long id) {
         Optional<CaloricExpenditure> exists = caloricExpenditureRepository.findById(id);
         if (exists.isEmpty()) {
-            throw new RuntimeException("Não existe cálculo energético para este paciente.");
+            throw new EntityNotFoundException("Não existe cálculo energético para este paciente.");
         }
         caloricExpenditureRepository.deleteById(id);
-        return true;
     }
 }

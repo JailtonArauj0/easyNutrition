@@ -1,5 +1,7 @@
 package br.com.easynutrition.services;
 
+import br.com.easynutrition.exception.CustomException;
+import br.com.easynutrition.exception.EntityNotFoundException;
 import br.com.easynutrition.models.Person;
 import br.com.easynutrition.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +21,15 @@ public class PersonService {
         return personRepository.findAll();
     }
 
-    public Person findById(Long id) {
-        return personRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+    public Person findById(Long id){
+        return personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
     }
 
     @Transactional
     public Person save(Person person){
         Optional<Person> exists = personRepository.findPersonByCpf(person.getCpf());
         if (exists.isPresent()) {
-            throw new RuntimeException("Este CPF já está sendo utilizado.");
+            throw new CustomException("Este CPF já está sendo utilizado.");
         }
         LocalDate date = person.getBirthDate();
         int age = LocalDate.now().getYear() - date.getYear();
