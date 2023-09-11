@@ -6,6 +6,7 @@ import br.com.easynutrition.services.PersonService;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,12 +35,9 @@ public class PersonController {
     @GetMapping("/{id}")
     private ResponseEntity<PersonDTO> findById(@PathVariable Long id) {
         Person person = personService.findById(id);
-
         PersonDTO personDTO = new PersonDTO(person);
-        if (person != null) {
-            return new ResponseEntity<>(personDTO, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        BeanUtils.copyProperties(person, personDTO);
+        return new ResponseEntity<>(personDTO, HttpStatus.OK);
     }
 
     @PostMapping
