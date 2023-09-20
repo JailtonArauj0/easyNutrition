@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class CaloricExpenditureDTO {
+    private long id;
     private double weight;
     private double height;
     private int age;

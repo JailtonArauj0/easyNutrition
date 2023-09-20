@@ -3,6 +3,7 @@ package br.com.easynutrition.controllers;
 import br.com.easynutrition.dtos.CaloricExpenditureDTO;
 import br.com.easynutrition.models.CaloricExpenditure;
 import br.com.easynutrition.services.CaloricExpenditureService;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,10 +16,10 @@ public class CaloricExpenditureController {
     @Autowired
     private CaloricExpenditureService caloricExpenditureService;
 
-    @GetMapping
-    private ResponseEntity<CaloricExpenditureDTO> findByPersonId(@RequestBody CaloricExpenditure caloricExpenditure) {
+    @GetMapping("/{id}")
+    private ResponseEntity<CaloricExpenditureDTO> findByPersonId(@PathVariable Long id) {
         CaloricExpenditureDTO expenditureDTO = new CaloricExpenditureDTO();
-        CaloricExpenditure expenditure = caloricExpenditureService.findByPersonId(caloricExpenditure.getPerson().getId());
+        CaloricExpenditure expenditure = caloricExpenditureService.findByPersonId(id);
         BeanUtils.copyProperties(expenditure, expenditureDTO);
         return new ResponseEntity<>(expenditureDTO, HttpStatus.OK);
     }

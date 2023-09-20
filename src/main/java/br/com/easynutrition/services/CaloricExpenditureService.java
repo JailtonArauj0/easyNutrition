@@ -19,7 +19,11 @@ public class CaloricExpenditureService {
     private CaloricExpenditureRepository caloricExpenditureRepository;
 
     public CaloricExpenditure findByPersonId(Long id) {
-        return caloricExpenditureRepository.findAllByPersonId(id);
+        CaloricExpenditure caloricExpenditure = caloricExpenditureRepository.findAllByPersonId(id);
+        if (caloricExpenditure == null) {
+            throw new EntityNotFoundException("Cálculo calórico não encontrado para este paciente.");
+        }
+        return caloricExpenditure;
     }
 
     @Transactional
@@ -51,6 +55,9 @@ public class CaloricExpenditureService {
 
     @Transactional
     public CaloricExpenditure update(CaloricExpenditure caloricExpenditure) {
+        if (caloricExpenditure.getId() == 0 || caloricExpenditure.getPerson().getId() == 0) {
+            throw new CustomException("Informe os ID's corretamente!");
+        }
         Optional<CaloricExpenditure> exists = caloricExpenditureRepository.findById(caloricExpenditure.getId());
         if (exists.isEmpty()) {
             throw new EntityNotFoundException("Não existe cálculo energético para este paciente.");
@@ -79,10 +86,10 @@ public class CaloricExpenditureService {
 
     @Transactional
     public void delete(Long id) {
-        Optional<CaloricExpenditure> exists = caloricExpenditureRepository.findById(id);
-        if (exists.isEmpty()) {
+        CaloricExpenditure caloricExpenditure = caloricExpenditureRepository.findAllByPersonId(id);
+        if (caloricExpenditure == null) {
             throw new EntityNotFoundException("Não existe cálculo energético para este paciente.");
         }
-        caloricExpenditureRepository.deleteById(id);
+        caloricExpenditureRepository.delete(caloricExpenditure);
     }
 }
