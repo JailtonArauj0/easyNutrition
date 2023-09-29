@@ -1,5 +1,7 @@
 package br.com.easynutrition.controllers;
 
+import br.com.easynutrition.configuration.security.TokenService;
+import br.com.easynutrition.dtos.LoginResponseDTO;
 import br.com.easynutrition.dtos.UsersDTO;
 import br.com.easynutrition.dtos.UsersRegisterDTO;
 import br.com.easynutrition.exception.CustomException;
@@ -27,12 +29,15 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid UsersDTO usersDTO) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(usersDTO.getEmail(), usersDTO.getPassword());
         var auth = authenticationManager.authenticate(usernamePassword);
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken((Users) auth.getPrincipal());
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register")
