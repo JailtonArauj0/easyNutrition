@@ -40,4 +40,5 @@ public class Person implements Serializable {
     @Column(nullable = false)
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate birthDate;
+    private Long nutritionistId;
 }
