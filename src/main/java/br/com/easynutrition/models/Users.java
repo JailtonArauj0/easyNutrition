@@ -13,31 +13,38 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "TB_USERS")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class Users implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @Column(nullable = false, unique = true)
     private String email;
+
     @NotNull
     private String password;
+
     @NotNull
     private String fullName;
+
     @Column(length = 11, nullable = false, unique = true)
     private String cpf;
+
     @Column(length = 11)
     private String phone;
+
     @Enumerated(EnumType.STRING)
     private UsersRole usersRole;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate registrationDate;
 
