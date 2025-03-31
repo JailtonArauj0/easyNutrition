@@ -8,8 +8,8 @@ import br.com.easynutrition.exception.CustomException;
 import br.com.easynutrition.models.Users;
 import br.com.easynutrition.repositories.UserRepository;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,18 +24,17 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/auth")
+@AllArgsConstructor
 public class AuthenticationController {
-    @Autowired
     private AuthenticationManager authenticationManager;
-    @Autowired
     private UserRepository userRepository;
-    @Autowired
     private TokenService tokenService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid UsersDTO usersDTO) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(usersDTO.getEmail(), usersDTO.getPassword());
         var auth = authenticationManager.authenticate(usernamePassword);
+
         var token = tokenService.generateToken((Users) auth.getPrincipal());
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
