@@ -2,22 +2,26 @@ package br.com.easynutrition.dtos;
 
 import br.com.easynutrition.models.UsersRole;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
 public class UsersRegisterDTO {
-    @NotBlank
+    @NotBlank(message = "O campo email não pode ser nulo.")
     private String email;
-    @NotBlank
+
+    @NotBlank(message = "O campo password não pode ser nulo.")
     private String password;
-    @NotBlank
+
+    @NotBlank(message = "O campo fullName não pode ser nulo.")
     private String fullName;
-    @Size(min = 11, max = 11)
+
+    @Pattern(regexp = "\\d{11}", message = "O CPF deve conter 11 dígitos numéricos.")
     private String cpf;
-    @Size(min = 11, max = 11)
+
+    @Pattern(regexp = "\\d{11}", message = "O telefone deve conter 11 dígitos numéricos.")
     private String phone;
 
     private UsersRole usersRole;
