@@ -1,6 +1,6 @@
 package br.com.easynutrition.dtos;
 
-import br.com.easynutrition.models.UsersRole;
+import br.com.easynutrition.enums.UsersRole;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;

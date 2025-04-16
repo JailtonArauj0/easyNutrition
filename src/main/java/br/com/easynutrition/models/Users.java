@@ -1,5 +1,6 @@
 package br.com.easynutrition.models;
 
+import br.com.easynutrition.enums.UsersRole;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

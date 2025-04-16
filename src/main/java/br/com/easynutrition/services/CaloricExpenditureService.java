@@ -3,7 +3,7 @@ package br.com.easynutrition.services;
 import br.com.easynutrition.exception.CustomException;
 import br.com.easynutrition.exception.EntityNotFoundException;
 import br.com.easynutrition.models.CaloricExpenditure;
-import br.com.easynutrition.models.Formula;
+import br.com.easynutrition.enums.Formula;
 import br.com.easynutrition.repositories.CaloricExpenditureRepository;
 import br.com.easynutrition.utils.Equations;
 import org.springframework.beans.BeanUtils;

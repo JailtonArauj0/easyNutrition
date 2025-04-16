@@ -1,4 +1,4 @@
-package br.com.easynutrition.models;
+package br.com.easynutrition.enums;
 
 public enum Formula {
     HARRIS_BENEDICT,

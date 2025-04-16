@@ -1,5 +1,6 @@
 package br.com.easynutrition.models;
 
+import br.com.easynutrition.enums.Formula;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

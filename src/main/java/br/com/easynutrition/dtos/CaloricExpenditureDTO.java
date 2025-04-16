@@ -1,7 +1,7 @@
 package br.com.easynutrition.dtos;
 
 
-import br.com.easynutrition.models.Formula;
+import br.com.easynutrition.enums.Formula;
 import jakarta.persistence.Enumerated;
 import lombok.Data;
 import lombok.NoArgsConstructor;
