@@ -3,10 +3,8 @@ package br.com.easynutrition.controllers;
 import br.com.easynutrition.dtos.PersonDTO;
 import br.com.easynutrition.models.Person;
 import br.com.easynutrition.services.PersonService;
-import br.com.easynutrition.utils.GetCurrentUser;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -18,15 +16,18 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/users")
 public class PersonController {
-    @Autowired
     private PersonService personService;
+
+    public PersonController(PersonService personService) {
+        this.personService = personService;
+    }
 
     @Secured("ROLE_ADMIN")
     @GetMapping
     private List<PersonDTO> findAll() {
         List<Person> personList = personService.findAll();
         List<PersonDTO> personDTOList = new ArrayList<>();
-        for (Person person : personList){
+        for (Person person : personList) {
             PersonDTO personDTO = new PersonDTO();
             BeanUtils.copyProperties(person, personDTO);
             personDTOList.add(personDTO);
@@ -43,14 +44,13 @@ public class PersonController {
     }
 
     @PostMapping
-    private ResponseEntity<PersonDTO> save(@RequestBody @Valid PersonDTO personDTO){
+    private ResponseEntity<PersonDTO> save(@RequestBody @Valid PersonDTO personDTO) {
         Person person = new Person();
         BeanUtils.copyProperties(personDTO, person);
         Person savedPerson = personService.save(person);
         BeanUtils.copyProperties(savedPerson, personDTO);
         return new ResponseEntity<>(personDTO, HttpStatus.CREATED);
     }
-
 
     @PutMapping
     private ResponseEntity<PersonDTO> update(@RequestBody @Valid PersonDTO personDTO) {
