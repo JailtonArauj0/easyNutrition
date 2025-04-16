@@ -6,7 +6,6 @@ import br.com.easynutrition.models.NutritionalAssessment;
 import br.com.easynutrition.models.Person;
 import br.com.easynutrition.repositories.AnthropometryRepository;
 import br.com.easynutrition.utils.Classifications;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,11 +14,13 @@ import java.util.List;
 
 @Service
 public class AnthropometryService {
-    @Autowired
-    private AnthropometryRepository anthropometryRepository;
+    private final AnthropometryRepository anthropometryRepository;
+    private final PersonService personService;
 
-    @Autowired
-    private PersonService personService;
+    public AnthropometryService(AnthropometryRepository anthropometryRepository, PersonService personService) {
+        this.anthropometryRepository = anthropometryRepository;
+        this.personService = personService;
+    }
 
     public List<Anthropometry> findAllByEvaluationDate(LocalDate date, Long id) {
         List<Anthropometry> anthropometryList = anthropometryRepository.findAllByEvaluationDateAndPersonId(date, id);

@@ -1,13 +1,12 @@
 package br.com.easynutrition.services;
 
+import br.com.easynutrition.enums.Formula;
 import br.com.easynutrition.exception.CustomException;
 import br.com.easynutrition.exception.EntityNotFoundException;
 import br.com.easynutrition.models.CaloricExpenditure;
-import br.com.easynutrition.enums.Formula;
 import br.com.easynutrition.repositories.CaloricExpenditureRepository;
 import br.com.easynutrition.utils.Equations;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,8 +14,11 @@ import java.util.Optional;
 
 @Service
 public class CaloricExpenditureService {
-    @Autowired
-    private CaloricExpenditureRepository caloricExpenditureRepository;
+    private final CaloricExpenditureRepository caloricExpenditureRepository;
+
+    public CaloricExpenditureService(CaloricExpenditureRepository caloricExpenditureRepository) {
+        this.caloricExpenditureRepository = caloricExpenditureRepository;
+    }
 
     public CaloricExpenditure findByPersonId(Long id) {
         CaloricExpenditure caloricExpenditure = caloricExpenditureRepository.findAllByPersonId(id);
