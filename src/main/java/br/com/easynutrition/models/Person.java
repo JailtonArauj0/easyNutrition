@@ -42,5 +42,7 @@ public class Person implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
-    private Long nutritionistId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "nutritionist_id", nullable = false)
+    private Users nutritionist;
 }
