@@ -11,19 +11,19 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "TB_USERS")
+@Table(name = "USERS")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Users implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -44,8 +44,8 @@ public class Users implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UsersRole usersRole;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate registrationDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime registrationDate;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
