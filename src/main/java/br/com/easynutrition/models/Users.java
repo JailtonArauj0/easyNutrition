@@ -47,6 +47,9 @@ public class Users implements UserDetails {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime registrationDate;
 
+    @OneToMany(mappedBy = "nutritionist", fetch = FetchType.LAZY)
+    private List<Person> patients;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.usersRole == UsersRole.ADMIN) {
