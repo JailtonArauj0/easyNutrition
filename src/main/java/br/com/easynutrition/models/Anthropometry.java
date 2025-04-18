@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "TB_ANTHROPOMETRY")
+@Table(name = "ANTHROPOMETRY")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -21,12 +22,12 @@ public class Anthropometry implements Serializable {
     private static final long serialVersionUID = 107452316370886152L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(nullable = false)
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate evaluationDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime evaluationDate;
 
     @Column(nullable = false)
     private double weight;
@@ -46,8 +47,7 @@ public class Anthropometry implements Serializable {
     @Embedded
     private NutritionalAssessment nutritionalAssessment;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "person_id")
     private Person person;
-
 }
