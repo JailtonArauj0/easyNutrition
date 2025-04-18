@@ -23,20 +23,16 @@ public class Anthropometry implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime evaluationDate;
+    private Double weight;
 
     @Column(nullable = false)
-    private double weight;
+    private Integer height;
 
     @Column(nullable = false)
-    private double height;
-
-    @Column(nullable = false)
-    private char sex;
+    private Character sex;
 
     @Embedded
     private Skinfolds skinfolds;
@@ -50,4 +46,8 @@ public class Anthropometry implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "person_id")
     private Person person;
+
+    @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime evaluationDate;
 }
