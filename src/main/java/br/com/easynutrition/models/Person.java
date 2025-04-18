@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "TB_PERSON")
+@Table(name = "PERSON")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -21,8 +21,8 @@ public class Person implements Serializable {
     private static final long serialVersionUID = 4180137796036758253L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false)
     private String firstName;
@@ -30,7 +30,7 @@ public class Person implements Serializable {
     private String lastName;
 
     @Column(nullable = false)
-    private int age;
+    private Integer age;
 
     @Column(length = 11)
     private String phone;
@@ -39,7 +39,8 @@ public class Person implements Serializable {
     private String cpf;
 
     @Column(nullable = false)
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
+
     private Long nutritionistId;
 }
