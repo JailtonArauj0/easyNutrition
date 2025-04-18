@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "PERSON")
@@ -45,4 +46,7 @@ public class Person implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nutritionist_id", nullable = false)
     private Users nutritionist;
+
+    @OneToMany(mappedBy = "person")
+    private List<Anthropometry> anthropometries;
 }
