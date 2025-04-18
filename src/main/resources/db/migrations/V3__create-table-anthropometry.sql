@@ -5,7 +5,7 @@ CREATE TABLE ANTHROPOMETRY
     -- Informações básicas
     weight                        DECIMAL(4, 1) NOT NULL,
     height                        INTEGER       NOT NULL,
-    sex                           CHAR(1)       NOT NULL,
+    sex                           VARCHAR(10)       NOT NULL,
     evaluation_date               TIMESTAMP     NOT NULL,
 
     -- Dobras cutâneas (Skinfolds)

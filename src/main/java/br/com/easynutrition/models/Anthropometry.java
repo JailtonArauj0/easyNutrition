@@ -1,5 +1,6 @@
 package br.com.easynutrition.models;
 
+import br.com.easynutrition.enums.Gender;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,7 +32,8 @@ public class Anthropometry implements Serializable {
     private Integer height;
 
     @Column(nullable = false)
-    private Character sex;
+    @Enumerated(EnumType.STRING)
+    private Gender sex;
 
     @Embedded
     @AttributeOverrides({
@@ -78,3 +80,5 @@ public class Anthropometry implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime evaluationDate;
 }
+
+
