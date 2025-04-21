@@ -8,7 +8,6 @@ import br.com.easynutrition.exception.CustomException;
 import br.com.easynutrition.models.Users;
 import br.com.easynutrition.repositories.UserRepository;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/auth")
@@ -55,7 +54,7 @@ public class AuthenticationController {
         Users user = new Users();
         BeanUtils.copyProperties(usersRegisterDTO, user);
         user.setPassword(new BCryptPasswordEncoder().encode(usersRegisterDTO.getPassword()));
-        user.setRegistrationDate(LocalDate.now());
+        user.setRegistrationDate(LocalDateTime.now());
         userRepository.save(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

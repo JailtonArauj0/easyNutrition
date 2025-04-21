@@ -4,7 +4,7 @@ import br.com.easynutrition.models.Anthropometry;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -12,5 +12,5 @@ public interface AnthropometryRepository extends JpaRepository<Anthropometry, Lo
 
     List<Anthropometry> findAllByPersonId(Long id);
 
-    List<Anthropometry> findAllByEvaluationDateAndPersonId(LocalDate date, Long id);
+    List<Anthropometry> findAllByEvaluationDateAndPersonId(LocalDateTime date, Long id);
 }

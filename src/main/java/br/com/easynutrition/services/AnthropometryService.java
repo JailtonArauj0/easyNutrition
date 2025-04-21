@@ -9,7 +9,7 @@ import br.com.easynutrition.utils.Classifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -22,7 +22,7 @@ public class AnthropometryService {
         this.personService = personService;
     }
 
-    public List<Anthropometry> findAllByEvaluationDate(LocalDate date, Long id) {
+    public List<Anthropometry> findAllByEvaluationDate(LocalDateTime date, Long id) {
         List<Anthropometry> anthropometryList = anthropometryRepository.findAllByEvaluationDateAndPersonId(date, id);
         if (anthropometryList.isEmpty()) {
             throw new EntityNotFoundException("Não foram encontradas avaliações.");

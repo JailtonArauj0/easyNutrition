@@ -27,7 +27,7 @@ public class Classifications {
     public Classifications(Anthropometry anthropometry) {
         this.weight = anthropometry.getWeight();
         this.height = anthropometry.getHeight() / 100;
-        this.sex = anthropometry.getSex();
+        this.sex = anthropometry.getSex().getCode();
 
         Skinfolds skinfolds = anthropometry.getSkinfolds();
         this.tricipital = skinfolds.getTricipital();
