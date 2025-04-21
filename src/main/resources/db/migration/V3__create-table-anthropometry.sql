@@ -5,7 +5,7 @@ CREATE TABLE ANTHROPOMETRY
     -- Informações básicas
     weight                        DECIMAL(4, 1) NOT NULL,
     height                        INTEGER       NOT NULL,
-    sex                           VARCHAR(10)       NOT NULL,
+    sex                           VARCHAR(10)   NOT NULL,
     evaluation_date               TIMESTAMP     NOT NULL,
 
     -- Dobras cutâneas (Skinfolds)
@@ -37,8 +37,8 @@ CREATE TABLE ANTHROPOMETRY
     assessment_bf_classification  VARCHAR(255),
 
     -- Relacionamento com Person
-    person_id                     BIGINT,
+    person_id                     BIGINT  NOT NULL,
 
     -- Constraints
-    CONSTRAINT fk_anthropometry_person FOREIGN KEY (person_id) REFERENCES PERSON (id)
+    CONSTRAINT fk_anthropometry_person FOREIGN KEY (person_id) REFERENCES PERSON (id) ON DELETE CASCADE
 );
