@@ -47,6 +47,6 @@ public class Person implements Serializable {
     @JoinColumn(name = "nutritionist_id", nullable = false)
     private Users nutritionist;
 
-    @OneToMany(mappedBy = "person")
+    @OneToMany(mappedBy = "person", orphanRemoval = true, cascade = CascadeType.REMOVE)
     private List<Anthropometry> anthropometries;
 }
