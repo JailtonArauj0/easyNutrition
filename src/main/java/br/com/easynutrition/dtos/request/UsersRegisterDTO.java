@@ -1,11 +1,9 @@
-package br.com.easynutrition.dtos;
+package br.com.easynutrition.dtos.request;
 
 import br.com.easynutrition.enums.UsersRole;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
-
-import java.time.LocalDate;
 
 @Data
 public class UsersRegisterDTO {
@@ -25,6 +23,4 @@ public class UsersRegisterDTO {
     private String phone;
 
     private UsersRole usersRole;
-
-    private LocalDate registrationDate;
 }
