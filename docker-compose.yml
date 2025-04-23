@@ -11,6 +11,8 @@ services:
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       - SPRING_JPA_HIBERNATE_DDL_AUTO=none
       - SPRING_JPA_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+      - TZ=America/Sao_Paulo
+      - JAVA_TOOL_OPTIONS=-Duser.timezone=America/Sao_Paulo
     depends_on:
       - dbPostgresql
 
