@@ -2,6 +2,7 @@ package br.com.easynutrition.dtos.response;
 
 import br.com.easynutrition.models.Person;
 import br.com.easynutrition.models.Users;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,8 +19,8 @@ public class PersonDTO {
     private Integer age;
     private String phone;
     private String cpf;
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate birthDate;
-    private Users nutritionist;
 
     public PersonDTO(Person person) {
         this.id = person.getId();
