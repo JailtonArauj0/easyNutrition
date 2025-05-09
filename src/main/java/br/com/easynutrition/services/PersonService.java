@@ -28,8 +28,10 @@ public class PersonService {
         return personRepository.findAll();
     }
 
-    public Person findById(Long id) {
-        return personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+    public PersonDTO findById(Long id) {
+        Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+
+        return new PersonDTO(person);
     }
 
     private void validateUniqueCpf(String cpf) {

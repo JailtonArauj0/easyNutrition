@@ -38,13 +38,11 @@ public class PersonController {
         return personRegisterDTOList;
     }
 
-//    @GetMapping("/{id}")
-//    private ResponseEntity<PersonRegisterDTO> findById(@PathVariable Long id) {
-//        Person person = personService.findById(id);
-//        PersonRegisterDTO personRegisterDTO = new PersonRegisterDTO(person);
-//        BeanUtils.copyProperties(person, personRegisterDTO);
-//        return new ResponseEntity<>(personRegisterDTO, HttpStatus.OK);
-//    }
+    @GetMapping("/{id}")
+    private ResponseEntity<PersonDTO> findById(@PathVariable Long id) {
+        PersonDTO person = personService.findById(id);
+        return new ResponseEntity<>(person, HttpStatus.OK);
+    }
 
     @PostMapping
     private ResponseEntity<PersonDTO> save(@RequestBody @Valid PersonRegisterDTO personRegisterDTO) {
