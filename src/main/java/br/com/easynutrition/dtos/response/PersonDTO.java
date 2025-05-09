@@ -1,0 +1,33 @@
+package br.com.easynutrition.dtos.response;
+
+import br.com.easynutrition.models.Person;
+import br.com.easynutrition.models.Users;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class PersonDTO {
+    private Long id;
+    private String firstName;
+    private String lastName;
+    private Integer age;
+    private String phone;
+    private String cpf;
+    private LocalDate birthDate;
+    private Users nutritionist;
+
+    public PersonDTO(Person person) {
+        this.id = person.getId();
+        this.firstName = person.getFirstName();
+        this.lastName = person.getLastName();
+        this.age = person.getAge();
+        this.phone = person.getPhone();
+        this.cpf = person.getCpf();
+        this.birthDate = person.getBirthDate();
+    }
+}
