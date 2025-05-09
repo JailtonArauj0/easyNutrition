@@ -2,6 +2,7 @@ package br.com.easynutrition.models;
 
 import br.com.easynutrition.enums.UsersRole;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -50,6 +51,7 @@ public class Users implements UserDetails {
     private LocalDateTime registrationDate;
 
     @OneToMany(mappedBy = "nutritionist", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Person> patients;
 
     @Override
