@@ -59,13 +59,29 @@ public class PersonService {
         return new PersonDTO(personSaved);
     }
 
-    @Transactional
-    public Person update(Person person) {
-        this.findById(person.getId());
-        LocalDate date = person.getBirthDate();
-        int age = LocalDate.now().getYear() - date.getYear();
+    @Transactional(rollbackFor = Exception.class)
+    public PersonDTO update(PersonRegisterDTO personRegisterDTO, Long id) {
+        Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+
+        if (!personRegisterDTO.getCpf().equals(person.getCpf())) {
+            validateUniqueCpf(personRegisterDTO.getCpf());
+        }
+
+        Users nutritionist = nutritionistExistAndGet(personRegisterDTO.getNutritionistId());
+
+        person.setFirstName(personRegisterDTO.getFirstName());
+        person.setLastName(personRegisterDTO.getLastName());
+        person.setPhone(personRegisterDTO.getPhone());
+        person.setCpf(personRegisterDTO.getCpf());
+        person.setBirthDate(personRegisterDTO.getBirthDate());
+        person.setNutritionist(nutritionist);
+
+        int age = LocalDate.now().getYear() - personRegisterDTO.getBirthDate().getYear();
         person.setAge(age);
-        return personRepository.save(person);
+
+        Person personSaved = personRepository.save(person);
+
+        return new PersonDTO(personSaved);
     }
 
     @Transactional
