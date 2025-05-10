@@ -28,10 +28,8 @@ public class PersonService {
         return personRepository.findAll();
     }
 
-    public PersonDTO findById(Long id) {
-        Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
-
-        return new PersonDTO(person);
+    public Person personExistAndGet(Long id) {
+        return personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
     }
 
     private void validateUniqueCpf(String cpf) {
@@ -61,7 +59,7 @@ public class PersonService {
 
     @Transactional(rollbackFor = Exception.class)
     public PersonDTO update(PersonRegisterDTO personRegisterDTO, Long id) {
-        Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+        Person person = personExistAndGet(id);
 
         if (!personRegisterDTO.getCpf().equals(person.getCpf())) {
             validateUniqueCpf(personRegisterDTO.getCpf());
@@ -84,9 +82,9 @@ public class PersonService {
         return new PersonDTO(personSaved);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        this.findById(id);
+        personExistAndGet(id);
         personRepository.deleteById(id);
     }
 }
