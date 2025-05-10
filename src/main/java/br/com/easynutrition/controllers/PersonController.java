@@ -57,13 +57,10 @@ public class PersonController {
         return ResponseEntity.created(location).body(savedPerson);
     }
 
-    @PutMapping
-    private ResponseEntity<PersonRegisterDTO> update(@RequestBody @Valid PersonRegisterDTO personRegisterDTO) {
-        Person person = new Person();
-        BeanUtils.copyProperties(personRegisterDTO, person);
-        Person savedPerson = personService.update(person);
-        BeanUtils.copyProperties(savedPerson, personRegisterDTO);
-        return new ResponseEntity<>(personRegisterDTO, HttpStatus.OK);
+    @PutMapping("/{id}")
+    private ResponseEntity<PersonDTO> update(@RequestBody @Valid PersonRegisterDTO personRegisterDTO, @PathVariable Long id) {
+        PersonDTO savedPerson = personService.update(personRegisterDTO, id);
+        return ResponseEntity.ok(savedPerson);
     }
 
     @DeleteMapping("/{id}")
