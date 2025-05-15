@@ -2,31 +2,30 @@ package br.com.easynutrition.utils;
 
 import br.com.easynutrition.models.Anthropometry;
 import br.com.easynutrition.models.BodyCircunferences;
-import br.com.easynutrition.models.NutritionalAssessment;
 import br.com.easynutrition.models.Skinfolds;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 public class Classifications {
-    private double weight;
-    private double height;
-    private char sex;
-    private int age;
-    private double tricipital;
-    private double abdominal;
-    private double middleAxillary;
-    private double thoracic;
-    private double subscapular;
-    private double thigh;
-    private double suprailliac;
-
-    private double waist;
-    private double hip;
+    private Double weight;
+    private Double height;
+    private Character sex;
+    private Integer age;
+    private Double tricipital;
+    private Double abdominal;
+    private Double middleAxillary;
+    private Double thoracic;
+    private Double subscapular;
+    private Double thigh;
+    private Double suprailliac;
+    private Double waist;
+    private Double hip;
 
     public Classifications(Anthropometry anthropometry) {
         this.weight = anthropometry.getWeight();
-        this.height = anthropometry.getHeight() / 100;
+        this.height = (double) anthropometry.getHeight() / 100;
         this.sex = anthropometry.getSex().getCode();
 
         Skinfolds skinfolds = anthropometry.getSkinfolds();
@@ -45,7 +44,7 @@ public class Classifications {
 
     public double bmi() {
         double bmi = (this.weight / this.height) / this.height;
-        return Math.round(bmi*100.0) / 100.0;
+        return Math.round(bmi * 100.0) / 100.0;
     }
 
     public String bmiClassification() {
@@ -53,15 +52,15 @@ public class Classifications {
 
         if (bmiValue < 18.5) {
             return "Abaixo do Peso";
-        } else if (bmiValue > 18.5 && bmiValue < 24.9 ) {
+        } else if (bmiValue > 18.5 && bmiValue < 24.9) {
             return "Peso Normal";
         } else if (bmiValue > 25 && bmiValue < 29.9) {
             return "Sobrepeso";
-        } else if (bmiValue > 30 && bmiValue < 35){
+        } else if (bmiValue > 30 && bmiValue < 35) {
             return "Obesidade Grau I";
-        }else if (bmiValue > 35 && bmiValue < 40){
+        } else if (bmiValue > 35 && bmiValue < 40) {
             return "Obesidade Grau II";
-        }else if (bmiValue > 40){
+        } else if (bmiValue > 40) {
             return "Obesidade Grau III";
         }
         return "Não foi possível classificar";
@@ -69,7 +68,7 @@ public class Classifications {
 
     public double whr() {
         double whr = this.waist / this.hip;
-        return Math.round(whr*100.0) / 100.0;
+        return Math.round(whr * 100.0) / 100.0;
     }
 
     public String whrClassification() {
@@ -78,7 +77,7 @@ public class Classifications {
         if (sex == 'M' || sex == 'm') {
             if (whrValue < 0.95) {
                 return "Baixo Risco";
-            } else if (whrValue > 0.95 && whrValue <1.0) {
+            } else if (whrValue > 0.95 && whrValue < 1.0) {
                 return "Médio Risco";
             } else if (whrValue > 1.0) {
                 return "Alto Risco";

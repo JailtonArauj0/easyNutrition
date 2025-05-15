@@ -8,13 +8,13 @@ import java.util.ArrayList;
 @Data
 public class Equations {
 
-    private double weight;
-    private double height;
-    private int age;
-    private char sex;
-    private double activityFactor;
-    private double geb;
-    private double get;
+    private Double weight;
+    private Double height;
+    private Integer age;
+    private Character sex;
+    private Double activityFactor;
+    private Double geb;
+    private Double get;
 
 
     public void eerIom(char sex) {
