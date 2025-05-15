@@ -26,16 +26,10 @@ public class PersonController {
     }
 
     @Secured("ROLE_ADMIN")
-    @GetMapping
-    private List<PersonRegisterDTO> findAll() {
-        List<Person> personList = personService.findAll();
-        List<PersonRegisterDTO> personRegisterDTOList = new ArrayList<>();
-        for (Person person : personList) {
-            PersonRegisterDTO personRegisterDTO = new PersonRegisterDTO();
-            BeanUtils.copyProperties(person, personRegisterDTO);
-            personRegisterDTOList.add(personRegisterDTO);
-        }
-        return personRegisterDTOList;
+    @GetMapping("/all")
+    private ResponseEntity<List<PersonDTO>> findAll() {
+        List<PersonDTO> personList = personService.findAll();
+        return ResponseEntity.ok(personList);
     }
 
     @GetMapping("/{id}")
