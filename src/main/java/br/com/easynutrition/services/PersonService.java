@@ -24,25 +24,16 @@ public class PersonService {
         this.userRepository = userRepository;
     }
 
-    public List<Person> findAll() {
-        return personRepository.findAll();
+    public List<PersonDTO> findAll() {
+        return personRepository.findAll()
+                .stream()
+                .map(PersonDTO::new)
+                .toList();
     }
 
-    public Person personExistAndGet(Long id) {
-        return personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
-    }
-
-    private void validateUniqueCpf(String cpf) {
-        personRepository.findPersonByCpf(cpf).ifPresent(
-                person -> {
-                    throw new CustomException("Já existe um usuário cadastrado com o CPF informado.");
-                }
-        );
-    }
-
-    private Users nutritionistExistAndGet(Long nutritionistId) {
-        return userRepository.findById(nutritionistId)
-                    .orElseThrow(() -> new EntityNotFoundException("Nutricionista não encontrado com o ID informado."));
+    public PersonDTO findById(Long id) {
+        Person person = personExistAndGet(id);
+        return new PersonDTO(person);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -86,5 +77,22 @@ public class PersonService {
     public void delete(Long id) {
         personExistAndGet(id);
         personRepository.deleteById(id);
+    }
+
+    public Person personExistAndGet(Long id) {
+        return personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+    }
+
+    private void validateUniqueCpf(String cpf) {
+        personRepository.findPersonByCpf(cpf).ifPresent(
+                person -> {
+                    throw new CustomException("Já existe um usuário cadastrado com o CPF informado.");
+                }
+        );
+    }
+
+    private Users nutritionistExistAndGet(Long nutritionistId) {
+        return userRepository.findById(nutritionistId)
+                .orElseThrow(() -> new EntityNotFoundException("Nutricionista não encontrado com o ID informado."));
     }
 }
