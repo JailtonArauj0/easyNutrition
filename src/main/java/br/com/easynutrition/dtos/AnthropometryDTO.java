@@ -1,32 +1,35 @@
 package br.com.easynutrition.dtos;
 
-import br.com.easynutrition.models.BodyCircunferences;
-import br.com.easynutrition.models.NutritionalAssessment;
-import br.com.easynutrition.models.Person;
-import br.com.easynutrition.models.Skinfolds;
+import br.com.easynutrition.models.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 public class AnthropometryDTO {
-    private long id;
-
-    @NotNull
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate evaluationDate;
-
-    private double weight;
-    private double height;
-    private char sex;
+    private Long id;
+    private Double weight;
+    private String height;
+    private String sex;
     private Skinfolds skinfolds;
     private BodyCircunferences bodyCircunferences;
     private NutritionalAssessment nutritionalAssessment;
-
-    @NotNull
     private Person person;
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    private LocalDateTime evaluationDate;
+
+    public AnthropometryDTO(Anthropometry anthropometry) {
+        this.id = anthropometry.getId();
+        this.weight = anthropometry.getWeight();
+        this.height = String.valueOf(anthropometry.getHeight() / 100);
+        this.sex = anthropometry.getSex().name();
+        this.skinfolds = anthropometry.getSkinfolds();
+        this.bodyCircunferences = anthropometry.getBodyCircunferences();
+        this.nutritionalAssessment = anthropometry.getNutritionalAssessment();
+        this.person = anthropometry.getPerson();
+        this.evaluationDate = anthropometry.getEvaluationDate();
+    }
 }
