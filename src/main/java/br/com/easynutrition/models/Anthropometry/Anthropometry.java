@@ -1,7 +1,11 @@
-package br.com.easynutrition.models;
+package br.com.easynutrition.models.Anthropometry;
 
+import br.com.easynutrition.dtos.response.AnthropometryDTO;
 import br.com.easynutrition.enums.Gender;
+import br.com.easynutrition.models.Person;
+import br.com.easynutrition.models.Skinfolds;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +13,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "ANTHROPOMETRY")
@@ -74,11 +78,27 @@ public class Anthropometry implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "person_id")
+    @JsonIgnore
     private Person person;
 
     @Column(nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime evaluationDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate evaluationDate;
+
+    public Anthropometry(Double weight, Integer height, Gender sex, Skinfolds skinfolds, BodyCircunferences bodyCircunferences, NutritionalAssessment nutritionalAssessment, Person person, LocalDate evaluationDate) {
+        this.weight = weight;
+        this.height = height;
+        this.sex = sex;
+        this.skinfolds = skinfolds;
+        this.bodyCircunferences = bodyCircunferences;
+        this.nutritionalAssessment = nutritionalAssessment;
+        this.person = person;
+        this.evaluationDate = evaluationDate;
+    }
+
+    public AnthropometryDTO toDTO() {
+        return new AnthropometryDTO(this);
+    }
 }
 
 

@@ -1,78 +1,131 @@
 package br.com.easynutrition.services;
 
+import br.com.easynutrition.dtos.request.AnthropometryRegisterDTO;
+import br.com.easynutrition.dtos.response.AnthropometryDTO;
+import br.com.easynutrition.dtos.response.BmiClassificationDTO;
+import br.com.easynutrition.enums.Gender;
+import br.com.easynutrition.exception.CustomException;
 import br.com.easynutrition.exception.EntityNotFoundException;
-import br.com.easynutrition.models.Anthropometry;
-import br.com.easynutrition.models.NutritionalAssessment;
+import br.com.easynutrition.models.Anthropometry.Anthropometry;
+import br.com.easynutrition.models.Anthropometry.NutritionalAssessment;
 import br.com.easynutrition.models.Person;
 import br.com.easynutrition.repositories.AnthropometryRepository;
+import br.com.easynutrition.repositories.PersonRepository;
 import br.com.easynutrition.utils.Classifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class AnthropometryService {
     private final AnthropometryRepository anthropometryRepository;
-    private final PersonService personService;
+    private final PersonRepository personRepository;
 
-    public AnthropometryService(AnthropometryRepository anthropometryRepository, PersonService personService) {
+    public AnthropometryService(AnthropometryRepository anthropometryRepository, PersonRepository personRepository) {
         this.anthropometryRepository = anthropometryRepository;
-        this.personService = personService;
+        this.personRepository = personRepository;
     }
 
-    public List<Anthropometry> findAllByEvaluationDate(LocalDateTime date, Long id) {
-        List<Anthropometry> anthropometryList = anthropometryRepository.findAllByEvaluationDateAndPersonId(date, id);
-        if (anthropometryList.isEmpty()) {
-            throw new EntityNotFoundException("Não foram encontradas avaliações.");
+    public List<AnthropometryDTO> findAllByPersonId(Long id) {
+        List<Anthropometry> anthropometries = anthropometryRepository.findAllByPersonId(id);
+        validateListSize(anthropometries);
+
+        return anthropometries
+                .stream()
+                .map(AnthropometryDTO::new)
+                .toList();
+    }
+
+    public AnthropometryDTO findById(Long id) {
+        Anthropometry anthropometry = getAnthropometryIfExists(id);
+        return anthropometry.toDTO();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public AnthropometryDTO save(AnthropometryRegisterDTO anthropometryRegisterDTO) {
+        Person person = getPersonIfExists(anthropometryRegisterDTO.getPerson().getId());
+
+        Anthropometry anthropometry = anthropometryRegisterDTO.toEntity();
+        anthropometry.setPerson(person);
+
+        return anthropometryRepository.save(anthropometry).toDTO();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public AnthropometryDTO update(AnthropometryRegisterDTO anthropometryRegisterDTO, Long anthropometryId) {
+        Anthropometry anthropometry = getAnthropometryIfExists(anthropometryId);
+
+        if (!anthropometry.getPerson().getId().equals(anthropometryRegisterDTO.getPerson().getId())) {
+            throw new CustomException("Esta antropometria não pertence a pessoa informada.");
         }
-        return anthropometryList;
+        ;
+
+        anthropometry.setWeight(anthropometryRegisterDTO.getWeight());
+        anthropometry.setHeight(anthropometryRegisterDTO.getHeight());
+        anthropometry.setSex(Gender.valueOf(anthropometryRegisterDTO.getSex()));
+        anthropometry.setSkinfolds(anthropometryRegisterDTO.getSkinfolds());
+        anthropometry.setBodyCircunferences(anthropometryRegisterDTO.getBodyCircunferences());
+        anthropometry.setNutritionalAssessment(anthropometryRegisterDTO.getNutritionalAssessment());
+
+        return anthropometryRepository.save(anthropometry).toDTO();
     }
 
-    public List<Anthropometry> findAllByPersonId(Long id) {
-        List<Anthropometry> anthropometryList = anthropometryRepository.findAllByPersonId(id);
-        if (anthropometryList.isEmpty()) {
-            throw new EntityNotFoundException("Não foram encontradas avaliações.");
-        }
-        return anthropometryList;
-    }
-
-    @Transactional
-    public Anthropometry save(Anthropometry anthropometry) {
-        Anthropometry assessment = nutritionalAssessment(anthropometry);
-        return anthropometryRepository.save(assessment);
-    }
-
-    @Transactional
-    public Anthropometry update(Anthropometry anthropometry) {
-        anthropometryRepository.findById(anthropometry.getId()).orElseThrow(() -> new EntityNotFoundException("Avaliação não encontrada."));
-        Anthropometry assessment = nutritionalAssessment(anthropometry);
-        return anthropometryRepository.save(assessment);
-    }
-
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        anthropometryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Avaliação não encontrada."));
+        getAnthropometryIfExists(id);
         anthropometryRepository.deleteById(id);
     }
 
-    private Anthropometry nutritionalAssessment(Anthropometry anthropometry) {
+    @Transactional(rollbackFor = Exception.class)
+    public BmiClassificationDTO generateBmiClassificationIfNotExist(Long id) {
+        Anthropometry anthropometry = getAnthropometryIfExists(id);
+
+        if (verifyBmiClassificationExist(anthropometry)) {
+            return new BmiClassificationDTO(anthropometry);
+        }
+
+        BmiClassificationDTO bmiClassificationDTO = generateBmiClassification(anthropometry);
+
+        NutritionalAssessment nutritionalAssessment = new NutritionalAssessment();
+        nutritionalAssessment.setBmi(bmiClassificationDTO.getBmi());
+        nutritionalAssessment.setBmiClassification(bmiClassificationDTO.getBmiClassification());
+
+        anthropometry.setNutritionalAssessment(nutritionalAssessment);
+        anthropometryRepository.save(anthropometry);
+
+        return bmiClassificationDTO;
+    }
+
+    private void validateListSize(List<Anthropometry> anthropometries) {
+        if (anthropometries.isEmpty()) {
+            throw new EntityNotFoundException("Não foram encontradas avaliações.");
+        }
+    }
+
+    private Person getPersonIfExists(Long personId) {
+        return personRepository
+                .findById(personId)
+                .orElseThrow(() -> new EntityNotFoundException("Paciente não encontrado."));
+    }
+
+    private Anthropometry getAnthropometryIfExists(Long id) {
+        return anthropometryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Avaliação não encontrada."));
+    }
+
+    private boolean verifyBmiClassificationExist(Anthropometry anthropometry) {
+        return Optional.ofNullable(anthropometry.getNutritionalAssessment())
+                .map(assessment ->
+                        assessment.getBmi() != null && assessment.getBmiClassification() != null
+                )
+                .orElse(false);
+    }
+
+    private BmiClassificationDTO generateBmiClassification(Anthropometry anthropometry) {
         Classifications classifications = new Classifications(anthropometry);
-        NutritionalAssessment assessment = new NutritionalAssessment();
 
-        Person person = personService.findById(anthropometry.getPerson().getId());
-        classifications.setAge(person.getAge());
-
-        assessment.setBmi(classifications.bmi());
-        assessment.setBmiClassification(classifications.bmiClassification());
-        assessment.setWhr(classifications.whr());
-        assessment.setWhrClassification(classifications.whrClassification());
-        assessment.setBodyFat(classifications.fatPercentagePollock());
-        assessment.setBfClassification(classifications.bfClassification(classifications.fatPercentagePollock()));
-
-        anthropometry.setNutritionalAssessment(assessment);
-
-        return anthropometry;
+        return new BmiClassificationDTO(classifications.bmi(), classifications.bmiClassification());
     }
 }

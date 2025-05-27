@@ -1,14 +1,19 @@
 package br.com.easynutrition.controllers;
 
-import br.com.easynutrition.dtos.AnthropometryDTO;
-import br.com.easynutrition.models.Anthropometry;
+import br.com.easynutrition.dtos.request.AnthropometryRegisterDTO;
+import br.com.easynutrition.dtos.response.AnthropometryDTO;
+import br.com.easynutrition.dtos.response.BmiClassificationDTO;
+import br.com.easynutrition.models.Anthropometry.Anthropometry;
 import br.com.easynutrition.services.AnthropometryService;
+import jakarta.validation.Path;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,51 +26,47 @@ public class AnthropometryController {
         this.anthropometryService = anthropometryService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<AnthropometryDTO>> findAllByEvaluationDate(@RequestBody Anthropometry anthropometry) {
-        List<AnthropometryDTO> anthropometryDTO = new ArrayList<>();
-        List<Anthropometry> anthropometryList = anthropometryService.findAllByEvaluationDate(anthropometry.getEvaluationDate(), anthropometry.getPerson().getId());
-        for (var anthropo : anthropometryList) {
-            AnthropometryDTO dto = new AnthropometryDTO();
-            BeanUtils.copyProperties(anthropo, dto);
-            anthropometryDTO.add(dto);
-        }
-        return new ResponseEntity<>(anthropometryDTO, HttpStatus.OK);
+    @GetMapping("/{id}")
+    public ResponseEntity<AnthropometryDTO> findById(@PathVariable Long id) {
+        AnthropometryDTO anthropometry = anthropometryService.findById(id);
+        return ResponseEntity.ok(anthropometry);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/person/{id}")
     public ResponseEntity<List<AnthropometryDTO>> findAllByPersonId(@PathVariable Long id) {
-        List<AnthropometryDTO> anthropometryDTO = new ArrayList<>();
-        List<Anthropometry> anthropometryList = anthropometryService.findAllByPersonId(id);
-        for (var anthropometry : anthropometryList) {
-            AnthropometryDTO dto = new AnthropometryDTO();
-            BeanUtils.copyProperties(anthropometry, dto);
-            anthropometryDTO.add(dto);
-        }
-        return new ResponseEntity<>(anthropometryDTO, HttpStatus.OK);
+        List<AnthropometryDTO> anthropometries = anthropometryService.findAllByPersonId(id);
+        return ResponseEntity.ok(anthropometries);
     }
 
     @PostMapping
-    public ResponseEntity<AnthropometryDTO> save(@RequestBody @Valid AnthropometryDTO anthropometryDTO) {
-        Anthropometry anthropometry = new Anthropometry();
-        BeanUtils.copyProperties(anthropometryDTO, anthropometry);
-        Anthropometry anthropometrySaved = anthropometryService.save(anthropometry);
-        BeanUtils.copyProperties(anthropometrySaved, anthropometryDTO);
-        return new ResponseEntity<>(anthropometryDTO, HttpStatus.CREATED);
+    public ResponseEntity<AnthropometryDTO> save(@RequestBody @Valid AnthropometryRegisterDTO anthropometryRegisterDTODTO) {
+        AnthropometryDTO anthropometrySaved = anthropometryService.save(anthropometryRegisterDTODTO);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(anthropometrySaved.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(anthropometrySaved);
     }
 
-    @PutMapping
-    public ResponseEntity<AnthropometryDTO> update(@RequestBody @Valid AnthropometryDTO anthropometryDTO) {
-        Anthropometry anthropometry = new Anthropometry();
-        BeanUtils.copyProperties(anthropometryDTO, anthropometry);
-        Anthropometry anthropometryUpdated = anthropometryService.update(anthropometry);
-        BeanUtils.copyProperties(anthropometryUpdated, anthropometryDTO);
-        return new ResponseEntity<>(anthropometryDTO, HttpStatus.OK);
+    @PutMapping("/{anthropometryId}")
+    public ResponseEntity<AnthropometryDTO> update(@RequestBody @Valid AnthropometryRegisterDTO anthropometryRegisterDTODTO,
+                                                   @PathVariable Long anthropometryId) {
+        AnthropometryDTO anthropometryUpdated = anthropometryService.update(anthropometryRegisterDTODTO, anthropometryId);
+        return ResponseEntity.ok(anthropometryUpdated);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         anthropometryService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/bmiClassification")
+    public ResponseEntity<BmiClassificationDTO> getBmiClassification(@PathVariable Long id) {
+        BmiClassificationDTO bmiClassification = anthropometryService.generateBmiClassificationIfNotExist(id);
+        return ResponseEntity.ok().body(bmiClassification);
     }
 }
