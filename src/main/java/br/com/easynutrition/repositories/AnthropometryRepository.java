@@ -1,6 +1,6 @@
 package br.com.easynutrition.repositories;
 
-import br.com.easynutrition.models.Anthropometry;
+import br.com.easynutrition.models.Anthropometry.Anthropometry;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
