@@ -1,6 +1,8 @@
 package br.com.easynutrition.models;
 
+import br.com.easynutrition.models.Anthropometry.Anthropometry;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,8 +49,10 @@ public class Person implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nutritionist_id", nullable = false)
+    @JsonIgnore
     private Users nutritionist;
 
-    @OneToMany(mappedBy = "person", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "person", orphanRemoval = true, cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Anthropometry> anthropometries;
 }
