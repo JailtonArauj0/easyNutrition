@@ -1,4 +1,4 @@
-package br.com.easynutrition.models;
+package br.com.easynutrition.models.Anthropometry;
 
 import jakarta.persistence.Embeddable;
 import lombok.Data;
