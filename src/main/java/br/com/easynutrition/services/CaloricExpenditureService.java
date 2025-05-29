@@ -86,12 +86,13 @@ public class CaloricExpenditureService {
         return caloricExpenditureRepository.save(caloricExpenditure);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        CaloricExpenditure caloricExpenditure = caloricExpenditureRepository.findAllByPersonId(id);
-        if (caloricExpenditure == null) {
-            throw new EntityNotFoundException("Não existe cálculo energético para este paciente.");
-        }
+        CaloricExpenditure caloricExpenditure = getCaloricExpenditureIfExist(id);
         caloricExpenditureRepository.delete(caloricExpenditure);
+    }
+
+    private CaloricExpenditure getCaloricExpenditureIfExist(Long id){
+        return caloricExpenditureRepository.findById(id).orElseThrow(() -> new  EntityNotFoundException("Cálculo energético não encontrado."));
     }
 }
