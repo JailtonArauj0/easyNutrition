@@ -1,6 +1,6 @@
 package br.com.easynutrition.models.Anthropometry;
 
-import br.com.easynutrition.dtos.response.AnthropometryDTO;
+import br.com.easynutrition.dtos.response.Anthropometry.AnthropometryDTO;
 import br.com.easynutrition.enums.Gender;
 import br.com.easynutrition.models.Person;
 import br.com.easynutrition.models.Skinfolds;
