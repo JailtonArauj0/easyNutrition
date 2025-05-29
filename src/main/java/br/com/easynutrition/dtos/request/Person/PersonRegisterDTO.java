@@ -1,4 +1,4 @@
-package br.com.easynutrition.dtos.request;
+package br.com.easynutrition.dtos.request.Person;
 
 import br.com.easynutrition.models.Person;
 import br.com.easynutrition.models.Users;

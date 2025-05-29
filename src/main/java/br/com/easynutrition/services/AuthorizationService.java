@@ -1,6 +1,6 @@
 package br.com.easynutrition.services;
 
-import br.com.easynutrition.dtos.request.UsersRegisterDTO;
+import br.com.easynutrition.dtos.request.Users.UsersRegisterDTO;
 import br.com.easynutrition.enums.UsersRole;
 import br.com.easynutrition.exception.CustomException;
 import br.com.easynutrition.models.Users;

@@ -2,8 +2,8 @@ package br.com.easynutrition.controllers;
 
 import br.com.easynutrition.configuration.security.TokenService;
 import br.com.easynutrition.dtos.LoginResponseDTO;
-import br.com.easynutrition.dtos.request.UsersDTO;
-import br.com.easynutrition.dtos.request.UsersRegisterDTO;
+import br.com.easynutrition.dtos.request.Users.UsersDTO;
+import br.com.easynutrition.dtos.request.Users.UsersRegisterDTO;
 import br.com.easynutrition.models.Users;
 import br.com.easynutrition.services.AuthorizationService;
 import jakarta.validation.Valid;

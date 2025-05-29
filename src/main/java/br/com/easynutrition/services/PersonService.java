@@ -1,7 +1,7 @@
 package br.com.easynutrition.services;
 
-import br.com.easynutrition.dtos.request.PersonRegisterDTO;
-import br.com.easynutrition.dtos.response.PersonDTO;
+import br.com.easynutrition.dtos.request.Person.PersonRegisterDTO;
+import br.com.easynutrition.dtos.response.Person.PersonDTO;
 import br.com.easynutrition.exception.CustomException;
 import br.com.easynutrition.exception.EntityNotFoundException;
 import br.com.easynutrition.models.Person;

@@ -1,4 +1,4 @@
-package br.com.easynutrition.dtos.response;
+package br.com.easynutrition.dtos.response.Person;
 
 import br.com.easynutrition.models.Person;
 import com.fasterxml.jackson.annotation.JsonFormat;

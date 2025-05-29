@@ -1,4 +1,4 @@
-package br.com.easynutrition.dtos.request;
+package br.com.easynutrition.dtos.request.Users;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

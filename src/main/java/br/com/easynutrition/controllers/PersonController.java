@@ -1,11 +1,9 @@
 package br.com.easynutrition.controllers;
 
-import br.com.easynutrition.dtos.request.PersonRegisterDTO;
-import br.com.easynutrition.dtos.response.PersonDTO;
-import br.com.easynutrition.models.Person;
+import br.com.easynutrition.dtos.request.Person.PersonRegisterDTO;
+import br.com.easynutrition.dtos.response.Person.PersonDTO;
 import br.com.easynutrition.services.PersonService;
 import jakarta.validation.Valid;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
