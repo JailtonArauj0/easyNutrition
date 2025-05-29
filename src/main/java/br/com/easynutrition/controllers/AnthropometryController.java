@@ -1,20 +1,18 @@
 package br.com.easynutrition.controllers;
 
-import br.com.easynutrition.dtos.request.AnthropometryRegisterDTO;
-import br.com.easynutrition.dtos.response.AnthropometryDTO;
-import br.com.easynutrition.dtos.response.BmiClassificationDTO;
-import br.com.easynutrition.models.Anthropometry.Anthropometry;
+import br.com.easynutrition.dtos.request.Anthropometry.AnthropometryRegisterDTO;
+import br.com.easynutrition.dtos.request.Anthropometry.AnthropometryUpdateDTO;
+import br.com.easynutrition.dtos.response.Anthropometry.AnthropometryDTO;
+import br.com.easynutrition.dtos.response.Anthropometry.BmiClassificationDTO;
+import br.com.easynutrition.dtos.response.Anthropometry.BodyFatClassificationDTO;
+import br.com.easynutrition.dtos.response.Anthropometry.WhrClassificationDTO;
 import br.com.easynutrition.services.AnthropometryService;
-import jakarta.validation.Path;
 import jakarta.validation.Valid;
-import org.springframework.beans.BeanUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -52,9 +50,9 @@ public class AnthropometryController {
     }
 
     @PutMapping("/{anthropometryId}")
-    public ResponseEntity<AnthropometryDTO> update(@RequestBody @Valid AnthropometryRegisterDTO anthropometryRegisterDTODTO,
+    public ResponseEntity<AnthropometryDTO> update(@RequestBody @Valid AnthropometryUpdateDTO anthropometryUpdateDTO,
                                                    @PathVariable Long anthropometryId) {
-        AnthropometryDTO anthropometryUpdated = anthropometryService.update(anthropometryRegisterDTODTO, anthropometryId);
+        AnthropometryDTO anthropometryUpdated = anthropometryService.update(anthropometryUpdateDTO, anthropometryId);
         return ResponseEntity.ok(anthropometryUpdated);
     }
 
@@ -69,4 +67,17 @@ public class AnthropometryController {
         BmiClassificationDTO bmiClassification = anthropometryService.generateBmiClassificationIfNotExist(id);
         return ResponseEntity.ok().body(bmiClassification);
     }
+
+    @GetMapping("/{id}/whrClassification")
+    public ResponseEntity<WhrClassificationDTO> getWhrClassification(@PathVariable Long id) {
+        WhrClassificationDTO whrClassification = anthropometryService.generateWhrClassificationIfNotExist(id);
+        return ResponseEntity.ok().body(whrClassification);
+    }
+
+    @GetMapping("/{id}/bodyFatClassification")
+    public ResponseEntity<BodyFatClassificationDTO> getBodyFatClassification(@PathVariable Long id) {
+        BodyFatClassificationDTO bodyFatClassification = anthropometryService.generateBfClassificationIfNotExist(id);
+        return ResponseEntity.ok(bodyFatClassification);
+    }
+
 }
