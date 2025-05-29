@@ -1,4 +1,4 @@
-package br.com.easynutrition.dtos.response;
+package br.com.easynutrition.dtos.response.Anthropometry;
 
 import br.com.easynutrition.models.Anthropometry.Anthropometry;
 import lombok.Getter;

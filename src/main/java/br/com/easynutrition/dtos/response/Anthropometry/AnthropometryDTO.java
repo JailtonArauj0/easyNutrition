@@ -1,9 +1,8 @@
-package br.com.easynutrition.dtos.response;
+package br.com.easynutrition.dtos.response.Anthropometry;
 
 import br.com.easynutrition.models.Anthropometry.Anthropometry;
 import br.com.easynutrition.models.Anthropometry.BodyCircunferences;
 import br.com.easynutrition.models.Anthropometry.NutritionalAssessment;
-import br.com.easynutrition.models.Person;
 import br.com.easynutrition.models.Skinfolds;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;

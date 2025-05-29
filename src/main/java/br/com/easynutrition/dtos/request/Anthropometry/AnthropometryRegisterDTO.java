@@ -1,4 +1,4 @@
-package br.com.easynutrition.dtos.request;
+package br.com.easynutrition.dtos.request.Anthropometry;
 
 import br.com.easynutrition.enums.Gender;
 import br.com.easynutrition.models.Anthropometry.Anthropometry;
