@@ -1,9 +1,8 @@
 package br.com.easynutrition.utils;
 
-import br.com.easynutrition.models.Anthropometry.Anthropometry;
-import br.com.easynutrition.models.Anthropometry.BodyCircunferences;
-import br.com.easynutrition.models.Person;
-import br.com.easynutrition.models.Skinfolds;
+import br.com.easynutrition.domain.model.Anthropometry.Anthropometry;
+import br.com.easynutrition.domain.model.Anthropometry.BodyCircunferences;
+import br.com.easynutrition.domain.model.Anthropometry.Skinfolds;
 import lombok.Getter;
 import lombok.Setter;
 

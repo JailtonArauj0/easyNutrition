@@ -1,6 +1,6 @@
 package br.com.easynutrition.utils;
 
-import br.com.easynutrition.models.Users;
+import br.com.easynutrition.domain.model.User.Users;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
