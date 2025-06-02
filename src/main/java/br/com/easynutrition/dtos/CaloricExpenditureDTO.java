@@ -1,13 +1,12 @@
 package br.com.easynutrition.dtos;
 
-
 import br.com.easynutrition.enums.Formula;
 import jakarta.persistence.Enumerated;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
 public class CaloricExpenditureDTO {
     private long id;
     private double weight;
@@ -15,10 +14,7 @@ public class CaloricExpenditureDTO {
     private int age;
     private char sex;
     private double activityFactor;
-
-    @Enumerated
     private Formula formula;
-
     private double geb;
     private double get;
 }
