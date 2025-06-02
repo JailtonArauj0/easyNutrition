@@ -2,10 +2,7 @@ package br.com.easynutrition.models;
 
 import br.com.easynutrition.enums.Formula;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -14,30 +11,44 @@ import java.io.Serializable;
 @Table(name = "TB_CALORIC_EXPENDITURE")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 public class CaloricExpenditure implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 5340798625542584951L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private double weight;
-    private double height;
-    private int age;
-    private char sex;
-    private double activityFactor;
+    @Column(nullable = false)
+    private Double weight;
 
+    @Column(nullable = false)
+    private Integer height;
+
+    @Column(nullable = false)
+    private Integer age;
+
+    @Column(nullable = false)
+    private String sex;
+
+    @Column(nullable = false)
+    private Double activityFactor;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Formula formula;
 
-    private double geb;
-    private double get;
+    @Column(nullable = false)
+    private Double geb;
 
-    @OneToOne
+    @Column(nullable = false)
+    private Double get;
+
+    @ManyToOne
     @JoinColumn(name = "person_id")
-    @NotNull
     private Person person;
 }
