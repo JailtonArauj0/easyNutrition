@@ -1,6 +1,7 @@
 package br.com.easynutrition.api.controller;
 
-import br.com.easynutrition.api.dto.CaloricExpenditureDTO;
+import br.com.easynutrition.api.dto.request.CaloricExpenditure.CaloricExpenditureRegisterDTO;
+import br.com.easynutrition.api.dto.response.CaloricExpenditure.CaloricExpenditureDTO;
 import br.com.easynutrition.domain.model.CaloricExpenditure.CaloricExpenditure;
 import br.com.easynutrition.domain.service.CaloricExpenditureService;
 import org.springframework.beans.BeanUtils;
@@ -9,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/caloric-expenditure")
+@RequestMapping(path = "/caloricExpenditure")
 public class CaloricExpenditureController {
     private final CaloricExpenditureService caloricExpenditureService;
 
@@ -25,21 +26,19 @@ public class CaloricExpenditureController {
         return new ResponseEntity<>(expenditureDTO, HttpStatus.OK);
     }
 
-    @PostMapping
-    private ResponseEntity<CaloricExpenditureDTO> save(@RequestBody CaloricExpenditure caloricExpenditure) {
-        var saved = caloricExpenditureService.save(caloricExpenditure);
-        CaloricExpenditureDTO expenditureDTO = new CaloricExpenditureDTO();
-        BeanUtils.copyProperties(saved, expenditureDTO);
+    @PostMapping("/eer")
+    private ResponseEntity<CaloricExpenditureDTO> calculateEer(@RequestBody CaloricExpenditureRegisterDTO caloricExpenditureRegisterDTO) {
+        CaloricExpenditureDTO expenditureDTO = caloricExpenditureService.calculateEer(caloricExpenditureRegisterDTO);
         return new ResponseEntity<>(expenditureDTO, HttpStatus.CREATED);
     }
 
     @PutMapping
-    private ResponseEntity<CaloricExpenditureDTO> update(@RequestBody CaloricExpenditure caloricExpenditure) {
-        var updated = caloricExpenditureService.update(caloricExpenditure);
-        CaloricExpenditureDTO expenditureDTO = new CaloricExpenditureDTO();
-        BeanUtils.copyProperties(updated, expenditureDTO);
-        return new ResponseEntity<>(expenditureDTO, HttpStatus.OK);
-    }
+//    private ResponseEntity<CaloricExpenditureDTO> update(@RequestBody CaloricExpenditure caloricExpenditure) {
+//        var updated = caloricExpenditureService.update(caloricExpenditure);
+//        CaloricExpenditureDTO expenditureDTO = new CaloricExpenditureDTO();
+//        BeanUtils.copyProperties(updated, expenditureDTO);
+//        return new ResponseEntity<>(expenditureDTO, HttpStatus.OK);
+//    }
 
     @DeleteMapping("/{id}")
     private ResponseEntity<?> delete(@PathVariable Long id) {
