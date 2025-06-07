@@ -10,13 +10,10 @@ import br.com.easynutrition.domain.model.CaloricExpenditure.CaloricExpenditure;
 import br.com.easynutrition.domain.repository.AnthropometryRepository;
 import br.com.easynutrition.domain.repository.CaloricExpenditureRepository;
 import br.com.easynutrition.utils.Equations;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CaloricExpenditureService {
@@ -40,21 +37,30 @@ public class CaloricExpenditureService {
     public CaloricExpenditureDTO calculateEer(CaloricExpenditureRegisterDTO caloricExpenditureRegisterDTO) {
         Anthropometry anthropometry = getAnthropometryIfExists(caloricExpenditureRegisterDTO.getAnthropometryId());
 
-        validateActivityFactor(anthropometry.getSex().name(), caloricExpenditureRegisterDTO.getActivityFactor());
+        validateEerActivityFactor(anthropometry.getSex().name(), caloricExpenditureRegisterDTO.getActivityFactor());
 
         CaloricExpenditure caloricExpenditure = generateCaloricExpenditure(anthropometry, caloricExpenditureRegisterDTO.getActivityFactor(), Formula.EER_IOM);
         return caloricExpenditureRepository.save(caloricExpenditure).toDTO();
     }
 
-    private CaloricExpenditure generateCaloricExpenditure(Anthropometry anthropometry, Double activityFactor, Formula formula) {
-        Equations equations = new Equations(anthropometry);
-        equations.setActivityFactor(activityFactor);
+    public CaloricExpenditureDTO calculateHarrisBenedict(CaloricExpenditureRegisterDTO caloricExpenditureRegisterDTO) {
+        Anthropometry anthropometry = getAnthropometryIfExists(caloricExpenditureRegisterDTO.getAnthropometryId());
 
-        return switch (formula) {
-            case HARRIS_BENEDICT -> equations.harrisBenedict(anthropometry.getSex().name());
-            case EER_IOM -> equations.eerIom(anthropometry.getSex().name());
-            case MIFFLIN_ST_JEOR -> equations.mifflin(anthropometry.getSex().name());
-        };
+        validateActivityFactor(caloricExpenditureRegisterDTO.getActivityFactor());
+
+        CaloricExpenditure caloricExpenditure = generateCaloricExpenditure(anthropometry, caloricExpenditureRegisterDTO.getActivityFactor(), Formula.HARRIS_BENEDICT);
+
+        return caloricExpenditureRepository.save(caloricExpenditure).toDTO();
+    }
+
+    public CaloricExpenditureDTO calculateMifflin(CaloricExpenditureRegisterDTO caloricExpenditureRegisterDTO) {
+        Anthropometry anthropometry = getAnthropometryIfExists(caloricExpenditureRegisterDTO.getAnthropometryId());
+
+        validateActivityFactor(caloricExpenditureRegisterDTO.getActivityFactor());
+
+        CaloricExpenditure caloricExpenditure = generateCaloricExpenditure(anthropometry, caloricExpenditureRegisterDTO.getActivityFactor(), Formula.MIFFLIN_ST_JEOR);
+
+        return caloricExpenditureRepository.save(caloricExpenditure).toDTO();
     }
 
 //    @Transactional(rollbackFor = Exception.class)
@@ -105,27 +111,38 @@ public class CaloricExpenditureService {
 //
 //        } else if (caloricExpenditure.getFormula().equals(Formula.EER_IOM)) {
 //            equations.eerIom(caloricExpenditure.getSex());
-////            caloricExpenditure.setGeb(0);
+
+    /// /            caloricExpenditure.setGeb(0);
 //            caloricExpenditure.setGet(equations.getGet());
 //        }
 //        return caloricExpenditureRepository.save(caloricExpenditure);
 //    }
-
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         CaloricExpenditure caloricExpenditure = getCaloricExpenditureIfExist(id);
         caloricExpenditureRepository.delete(caloricExpenditure);
     }
 
-    private CaloricExpenditure getCaloricExpenditureIfExist(Long id){
-        return caloricExpenditureRepository.findById(id).orElseThrow(() -> new  EntityNotFoundException("Cálculo energético não encontrado."));
+    private CaloricExpenditure getCaloricExpenditureIfExist(Long id) {
+        return caloricExpenditureRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cálculo energético não encontrado."));
     }
 
     private Anthropometry getAnthropometryIfExists(Long id) {
         return anthropometryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Avaliação não encontrada."));
     }
 
-    private void validateActivityFactor(String sex, Double activityFactor) {
+    private CaloricExpenditure generateCaloricExpenditure(Anthropometry anthropometry, Double activityFactor, Formula formula) {
+        Equations equations = new Equations(anthropometry);
+        equations.setActivityFactor(activityFactor);
+
+        return switch (formula) {
+            case HARRIS_BENEDICT -> equations.harrisBenedict(anthropometry.getSex().name());
+            case EER_IOM -> equations.eerIom(anthropometry.getSex().name());
+            case MIFFLIN_ST_JEOR -> equations.mifflin(anthropometry.getSex().name());
+        };
+    }
+
+    private void validateEerActivityFactor(String sex, Double activityFactor) {
         List<Double> allowedAfMan = List.of(1.00, 1.11, 1.25, 1.48);
         List<Double> allowAfWomen = List.of(1.00, 1.12, 1.27, 1.45);
 
@@ -137,6 +154,14 @@ public class CaloricExpenditureService {
             if(!allowAfWomen.contains(activityFactor)){
                 throw new CustomException("Fator de atividade incorreto, valores permitidos: " + allowAfWomen);
             }
+        }
+    }
+
+    private void validateActivityFactor(Double activityFactor) {
+        List<Double> allowedAfs = List.of(1.2, 1.375, 1.55, 1.725, 1.9);
+
+        if(!allowedAfs.contains(activityFactor)) {
+            throw new CustomException("Fator de atividade incorreto, valores permitidos: " + allowedAfs);
         }
     }
 }

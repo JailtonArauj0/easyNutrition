@@ -32,6 +32,18 @@ public class CaloricExpenditureController {
         return new ResponseEntity<>(expenditureDTO, HttpStatus.CREATED);
     }
 
+    @PostMapping("/harrisBenedict")
+    private ResponseEntity<CaloricExpenditureDTO> calculateHarrisBenedict(@RequestBody CaloricExpenditureRegisterDTO caloricExpenditureRegisterDTO) {
+        CaloricExpenditureDTO expenditureDTO = caloricExpenditureService.calculateHarrisBenedict(caloricExpenditureRegisterDTO);
+        return new ResponseEntity<>(expenditureDTO, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/mifflin")
+    private ResponseEntity<CaloricExpenditureDTO> calculateMifflin(@RequestBody CaloricExpenditureRegisterDTO caloricExpenditureRegisterDTO) {
+        CaloricExpenditureDTO expenditureDTO = caloricExpenditureService.calculateMifflin(caloricExpenditureRegisterDTO);
+        return new ResponseEntity<>(expenditureDTO, HttpStatus.CREATED);
+    }
+
     @PutMapping
 //    private ResponseEntity<CaloricExpenditureDTO> update(@RequestBody CaloricExpenditure caloricExpenditure) {
 //        var updated = caloricExpenditureService.update(caloricExpenditure);
