@@ -60,12 +60,12 @@ public class Equations {
     }
 
     public CaloricExpenditure harrisBenedict(String sex) {
-
+        double heightCm = this.height * 100;
         if (sex.equalsIgnoreCase("Masculino")) {
-            this.geb = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+            this.geb = 88.362 + (13.397 * weight) + (4.799 * heightCm) - (5.677 * age);
 
         } else {
-            this.geb = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+            this.geb = 447.593 + (9.247 * weight) + (3.098 * heightCm) - (4.330 * age);
 
         }
         this.get = geb * activityFactor;
@@ -85,12 +85,12 @@ public class Equations {
     }
 
     public CaloricExpenditure mifflin(String sex) {
-
+        double heightCm = this.height * 100;
         if (sex.equalsIgnoreCase("Masculino")) {
-            this.geb = (10 * weight) + (6.25 * height) - (5.0 * age) + 5;
+            this.geb = (10 * weight) + (6.25 * heightCm) - (5.0 * age) + 5;
 
         } else {
-            this.geb = (10 * weight) + (6.25 * height) - (5.0 * age) - 161;
+            this.geb = (10 * weight) + (6.25 * heightCm) - (5.0 * age) - 161;
 
         }
         this.get = geb * activityFactor;
@@ -99,5 +99,12 @@ public class Equations {
         caloricExpenditure.equationToEntity(this);
         caloricExpenditure.setFormula(Formula.MIFFLIN_ST_JEOR);
         return caloricExpenditure;
+        /*
+        Sedentário: 1.2
+        Levemente ativo: 1.375
+        Moderadamente ativo: 1.55
+        Muito ativo: 1.725
+        Extremamente ativo: 1.9
+        */
     }
 }
