@@ -2,9 +2,9 @@ package br.com.easynutrition.domain.service;
 
 import br.com.easynutrition.api.dto.request.CaloricExpenditure.CaloricExpenditureRegisterDTO;
 import br.com.easynutrition.api.dto.response.CaloricExpenditure.CaloricExpenditureDTO;
-import br.com.easynutrition.domain.enums.Formula;
 import br.com.easynutrition.api.exception.CustomException;
 import br.com.easynutrition.api.exception.EntityNotFoundException;
+import br.com.easynutrition.domain.enums.Formula;
 import br.com.easynutrition.domain.model.Anthropometry.Anthropometry;
 import br.com.easynutrition.domain.model.CaloricExpenditure.CaloricExpenditure;
 import br.com.easynutrition.domain.repository.AnthropometryRepository;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CaloricExpenditureService {
@@ -25,12 +26,21 @@ public class CaloricExpenditureService {
         this.anthropometryRepository = anthropometryRepository;
     }
 
-    public CaloricExpenditure findByPersonId(Long id) {
-        CaloricExpenditure caloricExpenditure = caloricExpenditureRepository.findAllByPersonId(id);
-        if (caloricExpenditure == null) {
-            throw new EntityNotFoundException("Cálculo calórico não encontrado para este paciente.");
+    public CaloricExpenditureDTO findById(Long id) {
+        return caloricExpenditureRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cálculo calórico não encontrado.")).toDTO();
+    }
+
+    public List<CaloricExpenditureDTO> findByPersonId(Long id) {
+        Optional<List<CaloricExpenditureDTO>> listOfEstimatives = caloricExpenditureRepository.findAllByPersonId(id)
+                .map(estimatives -> estimatives.stream()
+                        .map(CaloricExpenditure::toDTO)
+                        .toList());
+
+        if (listOfEstimatives.isEmpty()) {
+            throw new EntityNotFoundException("Nenhum cálculo calórico não encontrado para este paciente.");
         }
-        return caloricExpenditure;
+
+        return listOfEstimatives.get();
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -146,12 +156,12 @@ public class CaloricExpenditureService {
         List<Double> allowedAfMan = List.of(1.00, 1.11, 1.25, 1.48);
         List<Double> allowAfWomen = List.of(1.00, 1.12, 1.27, 1.45);
 
-        if(sex.equalsIgnoreCase("Masculino")) {
-            if(!allowedAfMan.contains(activityFactor)){
+        if (sex.equalsIgnoreCase("Masculino")) {
+            if (!allowedAfMan.contains(activityFactor)) {
                 throw new CustomException("Fator de atividade incorreto, valores permitidos: " + allowedAfMan);
             }
         } else {
-            if(!allowAfWomen.contains(activityFactor)){
+            if (!allowAfWomen.contains(activityFactor)) {
                 throw new CustomException("Fator de atividade incorreto, valores permitidos: " + allowAfWomen);
             }
         }
@@ -160,7 +170,7 @@ public class CaloricExpenditureService {
     private void validateActivityFactor(Double activityFactor) {
         List<Double> allowedAfs = List.of(1.2, 1.375, 1.55, 1.725, 1.9);
 
-        if(!allowedAfs.contains(activityFactor)) {
+        if (!allowedAfs.contains(activityFactor)) {
             throw new CustomException("Fator de atividade incorreto, valores permitidos: " + allowedAfs);
         }
     }
