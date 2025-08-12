@@ -2,12 +2,15 @@ package br.com.easynutrition.api.controller;
 
 import br.com.easynutrition.api.dto.request.CaloricExpenditure.CaloricExpenditureRegisterDTO;
 import br.com.easynutrition.api.dto.response.CaloricExpenditure.CaloricExpenditureDTO;
-import br.com.easynutrition.domain.model.CaloricExpenditure.CaloricExpenditure;
 import br.com.easynutrition.domain.service.CaloricExpenditureService;
-import org.springframework.beans.BeanUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/caloricExpenditure")
@@ -19,42 +22,59 @@ public class CaloricExpenditureController {
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity<CaloricExpenditureDTO> findByPersonId(@PathVariable Long id) {
-        CaloricExpenditureDTO expenditureDTO = new CaloricExpenditureDTO();
-        CaloricExpenditure expenditure = caloricExpenditureService.findByPersonId(id);
-        BeanUtils.copyProperties(expenditure, expenditureDTO);
-        return new ResponseEntity<>(expenditureDTO, HttpStatus.OK);
+    public ResponseEntity<CaloricExpenditureDTO> findById(@PathVariable Long id) {
+        CaloricExpenditureDTO caloricEstimate = caloricExpenditureService.findById(id);
+        return ResponseEntity.ok(caloricEstimate);
     }
 
-    @PostMapping("/eer")
-    private ResponseEntity<CaloricExpenditureDTO> calculateEer(@RequestBody CaloricExpenditureRegisterDTO caloricExpenditureRegisterDTO) {
+    @GetMapping("/findAll/{personId}")
+    public ResponseEntity<List<CaloricExpenditureDTO>> findByPersonId(@PathVariable Long personId) {
+        List<CaloricExpenditureDTO> caloricEstimates = caloricExpenditureService.findByPersonId(personId);
+        return ResponseEntity.ok(caloricEstimates);
+    }
+
+    @PostMapping("/calculate/eer")
+    public ResponseEntity<CaloricExpenditureDTO> calculateEer(@RequestBody CaloricExpenditureRegisterDTO caloricExpenditureRegisterDTO) {
         CaloricExpenditureDTO expenditureDTO = caloricExpenditureService.calculateEer(caloricExpenditureRegisterDTO);
-        return new ResponseEntity<>(expenditureDTO, HttpStatus.CREATED);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("caloricExpenditure/{id}")
+                .buildAndExpand(expenditureDTO.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(expenditureDTO);
     }
 
-    @PostMapping("/harrisBenedict")
-    private ResponseEntity<CaloricExpenditureDTO> calculateHarrisBenedict(@RequestBody CaloricExpenditureRegisterDTO caloricExpenditureRegisterDTO) {
+    @PostMapping("/calculate/harrisBenedict")
+    public ResponseEntity<CaloricExpenditureDTO> calculateHarrisBenedict(@RequestBody CaloricExpenditureRegisterDTO caloricExpenditureRegisterDTO) {
         CaloricExpenditureDTO expenditureDTO = caloricExpenditureService.calculateHarrisBenedict(caloricExpenditureRegisterDTO);
-        return new ResponseEntity<>(expenditureDTO, HttpStatus.CREATED);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("caloricExpenditure/{id}")
+                .buildAndExpand(expenditureDTO.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(expenditureDTO);
     }
 
-    @PostMapping("/mifflin")
-    private ResponseEntity<CaloricExpenditureDTO> calculateMifflin(@RequestBody CaloricExpenditureRegisterDTO caloricExpenditureRegisterDTO) {
+    @PostMapping("/calculate/mifflin")
+    public ResponseEntity<CaloricExpenditureDTO> calculateMifflin(@RequestBody CaloricExpenditureRegisterDTO caloricExpenditureRegisterDTO) {
         CaloricExpenditureDTO expenditureDTO = caloricExpenditureService.calculateMifflin(caloricExpenditureRegisterDTO);
-        return new ResponseEntity<>(expenditureDTO, HttpStatus.CREATED);
-    }
 
-    @PutMapping
-//    private ResponseEntity<CaloricExpenditureDTO> update(@RequestBody CaloricExpenditure caloricExpenditure) {
-//        var updated = caloricExpenditureService.update(caloricExpenditure);
-//        CaloricExpenditureDTO expenditureDTO = new CaloricExpenditureDTO();
-//        BeanUtils.copyProperties(updated, expenditureDTO);
-//        return new ResponseEntity<>(expenditureDTO, HttpStatus.OK);
-//    }
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("caloricExpenditure/{id}")
+                .buildAndExpand(expenditureDTO.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(expenditureDTO);
+    }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity<?> delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         caloricExpenditureService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }
