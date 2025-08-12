@@ -68,6 +68,6 @@ public class CaloricExpenditure implements Serializable {
     }
 
     public CaloricExpenditureDTO toDTO() {
-        return new CaloricExpenditureDTO(this.activityFactor, this.geb, this.get);
+        return new CaloricExpenditureDTO(this.id, this.formula.name(), this.activityFactor, this.geb, this.get);
     }
 }
