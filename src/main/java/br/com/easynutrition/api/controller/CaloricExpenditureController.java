@@ -3,8 +3,6 @@ package br.com.easynutrition.api.controller;
 import br.com.easynutrition.api.dto.request.CaloricExpenditure.CaloricExpenditureRegisterDTO;
 import br.com.easynutrition.api.dto.response.CaloricExpenditure.CaloricExpenditureDTO;
 import br.com.easynutrition.domain.service.CaloricExpenditureService;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -73,7 +71,7 @@ public class CaloricExpenditureController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         caloricExpenditureService.delete(id);
         return ResponseEntity.noContent().build();
     }

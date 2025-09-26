@@ -57,7 +57,7 @@ public class AnthropometryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         anthropometryService.delete(id);
         return ResponseEntity.noContent().build();
     }
