@@ -1,10 +1,12 @@
 package br.com.easynutrition.domain.service;
 
 import br.com.easynutrition.api.dto.request.Users.UsersRegisterDTO;
-import br.com.easynutrition.domain.enums.UsersRole;
 import br.com.easynutrition.api.exception.CustomException;
+import br.com.easynutrition.domain.enums.UsersRole;
 import br.com.easynutrition.domain.model.User.Users;
 import br.com.easynutrition.domain.repository.UserRepository;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,14 +15,17 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class AuthorizationService implements UserDetailsService {
     private final UserRepository userRepository;
+    private final TokenBlacklistService tokenBlacklistService;
 
-    public AuthorizationService(UserRepository userRepository) {
+    public AuthorizationService(UserRepository userRepository, TokenBlacklistService tokenBlacklistService) {
         this.userRepository = userRepository;
+        this.tokenBlacklistService = tokenBlacklistService;
     }
 
     @Override
@@ -49,5 +54,26 @@ public class AuthorizationService implements UserDetailsService {
                 .build();
 
         userRepository.save(user);
+    }
+
+    public Map<String, String> logout(String authHeader) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new CustomException("Bearer token não fornecido no header.");
+        }
+
+        try {
+            DecodedJWT jwt = JWT.decode(authHeader.replace("Bearer ", ""));
+            String tokenId = jwt.getId();
+
+            tokenBlacklistService.revokeToken(tokenId, authHeader);
+
+            return Map.of(
+                    "message", "Acesso revogado com sucesso."
+            );
+
+        } catch (Exception e) {
+            throw new CustomException("Token inválido.");
+        }
     }
 }
