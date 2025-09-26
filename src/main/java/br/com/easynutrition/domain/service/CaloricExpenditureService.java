@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CaloricExpenditureService {
@@ -31,16 +30,13 @@ public class CaloricExpenditureService {
     }
 
     public List<CaloricExpenditureDTO> findByPersonId(Long id) {
-        Optional<List<CaloricExpenditureDTO>> listOfEstimatives = caloricExpenditureRepository.findAllByPersonId(id)
-                .map(estimatives -> estimatives.stream()
-                        .map(CaloricExpenditure::toDTO)
-                        .toList());
+        List<CaloricExpenditure> listOfEstimatives = caloricExpenditureRepository.findAllByPersonId(id);
 
         if (listOfEstimatives.isEmpty()) {
             throw new EntityNotFoundException("Nenhum cálculo calórico não encontrado para este paciente.");
         }
 
-        return listOfEstimatives.get();
+        return listOfEstimatives.stream().map(CaloricExpenditure::toDTO).toList();
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -73,60 +69,6 @@ public class CaloricExpenditureService {
         return caloricExpenditureRepository.save(caloricExpenditure).toDTO();
     }
 
-//    @Transactional(rollbackFor = Exception.class)
-//    public CaloricExpenditure save(CaloricExpenditure caloricExpenditure) {
-//        Equations equations = new Equations();
-//        BeanUtils.copyProperties(caloricExpenditure, equations);
-//
-//        if (caloricExpenditure.getFormula().equals(Formula.HARRIS_BENEDICT)) {
-//            equations.harrisBenedict(caloricExpenditure.getSex());
-//            caloricExpenditure.setGeb(equations.getGeb());
-//            caloricExpenditure.setGet(equations.getGet());
-//
-//        } else if (caloricExpenditure.getFormula().equals(Formula.MIFFLIN_ST_JEOR)) {
-//            equations.mifflin(caloricExpenditure.getSex());
-//            caloricExpenditure.setGeb(equations.getGeb());
-//            caloricExpenditure.setGet(equations.getGet());
-//
-//        } else if (caloricExpenditure.getFormula().equals(Formula.EER_IOM)) {
-//            equations.eerIom(caloricExpenditure.getSex());
-//            caloricExpenditure.setGeb(0);
-//            caloricExpenditure.setGet(equations.getGet());
-//        }
-//        return caloricExpenditureRepository.save(caloricExpenditure);
-//    }
-
-//    @Transactional
-//    public CaloricExpenditure update(CaloricExpenditure caloricExpenditure) {
-//        if (caloricExpenditure.getId() == 0 || caloricExpenditure.getPerson().getId() == 0) {
-//            throw new CustomException("Informe os ID's corretamente!");
-//        }
-//        Optional<CaloricExpenditure> exists = caloricExpenditureRepository.findById(caloricExpenditure.getId());
-//        if (exists.isEmpty()) {
-//            throw new EntityNotFoundException("Não existe cálculo energético para este paciente.");
-//        }
-//
-//        Equations equations = new Equations();
-//        BeanUtils.copyProperties(caloricExpenditure, equations);
-//
-//        if (caloricExpenditure.getFormula().equals(Formula.HARRIS_BENEDICT)) {
-//            equations.harrisBenedict(caloricExpenditure.getSex());
-//            caloricExpenditure.setGeb(equations.getGeb());
-//            caloricExpenditure.setGet(equations.getGet());
-//
-//        } else if (caloricExpenditure.getFormula().equals(Formula.MIFFLIN_ST_JEOR)) {
-//            equations.mifflin(caloricExpenditure.getSex());
-//            caloricExpenditure.setGeb(equations.getGeb());
-//            caloricExpenditure.setGet(equations.getGet());
-//
-//        } else if (caloricExpenditure.getFormula().equals(Formula.EER_IOM)) {
-//            equations.eerIom(caloricExpenditure.getSex());
-
-    /// /            caloricExpenditure.setGeb(0);
-//            caloricExpenditure.setGet(equations.getGet());
-//        }
-//        return caloricExpenditureRepository.save(caloricExpenditure);
-//    }
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         CaloricExpenditure caloricExpenditure = getCaloricExpenditureIfExist(id);
