@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -35,7 +36,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         problem.setTitle("Um ou mais campos inválidos, preencha corretamente!");
         problem.setFields(fields);
 
-
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
@@ -59,6 +59,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         problem.setStatus(status.value());
         problem.setTitle(ex.getMessage());
 
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Object> handleEntityNotFound(BadCredentialsException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+
+        Problem problem = new Problem(LocalDateTime.now());
+        problem.setStatus(status.value());
+        problem.setTitle(ex.getMessage());
 
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
