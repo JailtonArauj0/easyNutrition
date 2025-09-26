@@ -51,7 +51,7 @@ public class CaloricExpenditure implements Serializable {
     @Column(nullable = false)
     private Double get;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "person_id")
     private Person person;
 
