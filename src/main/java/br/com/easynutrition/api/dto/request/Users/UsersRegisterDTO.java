@@ -3,9 +3,11 @@ package br.com.easynutrition.api.dto.request.Users;
 import br.com.easynutrition.domain.enums.UsersRole;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class UsersRegisterDTO {
     @NotBlank(message = "O campo email não pode ser nulo.")
     private String email;
